@@ -80,7 +80,62 @@ private:
     Passenger* passenger_;
     int ticketPrice_;
 };
+class Login {
+  // properties
+  string username;
+  string password;
 
+  // methods
+  bool is_valid();
+  // other methods related to managing login information
+};
+
+class Admin : public Login {
+  // properties
+  string name;
+  vector<Country*> restricted_countries;
+
+  // methods
+  void change_flight_schedule(Flight* flight);
+  void add_route(Country* country);
+  void update_airline_inquiry_details();
+  // other methods related to managing admin information and privileges
+};
+
+class PassengerAccount : public Login {
+  // properties
+  string name;
+  string cnic;
+  vector<Booking*> bookings;
+  PaymentDetails* payment_details;
+
+  // methods
+  void register_account();
+  void update_account();
+  void reset_password();
+  void verify_financial_details();
+  // other methods related to managing passenger account information
+};
+
+class PaymentDetails {
+  // properties
+  string account_number;
+  string routing_number;
+  string card_number;
+  string expiry_date;
+
+  // methods
+  bool is_valid();
+  // other methods related to managing payment details
+};
+class Country {
+  // properties
+  string name;
+  bool requires_visa;
+
+  // methods
+  // other methods related to managing country information
+};
 int main(){
  
     return 0;
