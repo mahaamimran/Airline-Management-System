@@ -1,141 +1,274 @@
 // final project
+// Maham 22i-2733
+/*
+- Aggregation:
+    - `City` has an array of `Airplane` objects.
+    - `Country` has an array of `Airplane` objects.
+    - `Passenger` has a `PassengerAccount` object.
+- Composition:
+    - `Flight` is composed of an `Airplane` object and a `Booking` object.
+- Inheritance:
+    - `Admin` inherits from `Login`.
+    - `PassengerAccount` inherits from `Login`.
+*/
+
 #include <iostream>
 using namespace std;
+// Airplane class
 class Airplane {
-public:
-    Airplane(int capacity, bool isInternational);
-    int getCapacity() const;
-    bool isInternational() const;
-private:
-    int capacity_;
-    bool isInternational_;
+    private:
+        int airplaneID;
+        int capacity;
+        bool isInternational;
+        string status; // in air / landed
+
+    public:
+        // Constructors
+        Airplane();
+        Airplane(int id, int cap, bool isInter, string stat);
+        Airplane(const Airplane &other);
+
+        // Getters and setters
+        int getAirplaneID() const;
+        void setAirplaneID(int id);
+        int getCapacity() const;
+        void setCapacity(int cap);
+        bool getIsInternational() const;
+        void setIsInternational(bool isInter);
+        string getStatus() const;
+        void setStatus(string stat);
 };
+
+// City class
 class City {
-public:
-    City(const string& name);
-    void addAirplane(Airplane* airplane);
-    void removeAirplane(Airplane* airplane);
-    int getNumAirplanes() const;
-    const string& getName() const;
-private:
-    string name_;
-    Airplane* airplanes_[10];
-    int numAirplanes_;
+    private:
+        string name;
+        char direction; // north / south
+        int numofAirplanes;
+        Airplane* airplanes;
+
+    public:
+        // Constructors
+        City();
+        City(string nm, char dir, int num, Airplane* airps);
+        City(const City &other);
+
+        // Getters and setters
+        string getName() const;
+        void setName(string nm);
+        char getDirection() const;
+        void setDirection(char dir);
+        int getNumofAirplanes() const;
+        void setNumofAirplanes(int num);
+        Airplane* getAirplanes() const;
+        void setAirplanes(Airplane* airps);
 };
 
-
-class Flight {
-public:
-    Flight(const string& source, const string& destination, int durationHours, Airplane* airplane);
-    const string& getSource() const;
-    const string& getDestination() const;
-    int getDurationHours() const;
-    Airplane* getAirplane() const;
-    int getNumAvailableSeats() const;
-    void reserveSeat();
-    void cancelSeat();
-private:
-    string source_;
-    string destination_;
-    int durationHours_;
-    Airplane* airplane_;
-    int numAvailableSeats_;
-};
-class FlightSchedule {
-public:
-    FlightSchedule();
-    void addFlight(Flight* flight);
-    void removeFlight(Flight* flight);
-    int getNumFlights() const;
-private:
-    Flight* flights_[15];
-    int numFlights_;
-};
-
-
-
-class Passenger {
-public:
-    Passenger(const string& name, const string& passportNumber, bool isLocal);
-    const string& getName() const;
-    const string& getPassportNumber() const;
-    bool isLocal() const;
-    void addVisitedCountry(const string& country, int cost);
-    const string& getMostVisitedCountry() const;
-    int getEstimatedCostMostVisitedCountry() const;
-private:
-    string name_;
-    string passportNumber_;
-    bool isLocal_;
-};
-
-class Booking {
-public:
-    Booking(Flight* flight, Passenger* passenger);
-    Flight* getFlight() const;
-    Passenger* getPassenger() const;
-    int getTicketPrice() const;
-private:
-    Flight* flight_;
-    Passenger* passenger_;
-    int ticketPrice_;
-};
-class Login {
-  // properties
-  string username;
-  string password;
-
-  // methods
-  bool is_valid();
-  // other methods related to managing login information
-};
-
-class Admin : public Login {
-  // properties
-  string name;
-  vector<Country*> restricted_countries;
-
-  // methods
-  void change_flight_schedule(Flight* flight);
-  void add_route(Country* country);
-  void update_airline_inquiry_details();
-  // other methods related to managing admin information and privileges
-};
-
-class PassengerAccount : public Login {
-  // properties
-  string name;
-  string cnic;
-  vector<Booking*> bookings;
-  PaymentDetails* payment_details;
-
-  // methods
-  void register_account();
-  void update_account();
-  void reset_password();
-  void verify_financial_details();
-  // other methods related to managing passenger account information
-};
-
-class PaymentDetails {
-  // properties
-  string account_number;
-  string routing_number;
-  string card_number;
-  string expiry_date;
-
-  // methods
-  bool is_valid();
-  // other methods related to managing payment details
-};
+// Country class
 class Country {
-  // properties
-  string name;
-  bool requires_visa;
+    private:
+        string name;
+        int numofAirplanes;
+        Airplane* airplanes;
 
-  // methods
-  // other methods related to managing country information
+    public:
+        // Constructors
+        Country();
+        Country(string nm, int num, Airplane* airps);
+        Country(const Country &other);
+
+        // Getters and setters
+        string getName() const;
+        void setName(string nm);
+        int getNumofAirplanes() const;
+        void setNumofAirplanes(int num);
+        Airplane* getAirplanes() const;
+        void setAirplanes(Airplane* airps);
 };
+
+// Login class
+class Login {
+    private:
+        string username;
+        string password;
+
+    public:
+        // Constructors
+        Login();
+        Login(string un, string pw);
+        Login(const Login &other);
+
+        // Getters and setters
+        string getUsername() const;
+        void setUsername(string un);
+        string getPassword() const;
+        void setPassword(string pw);
+};
+
+// Admin class
+class Admin : public Login {
+    private:
+        bool isAdmin;
+
+    public:
+        // Constructors
+        Admin();
+        Admin(bool isa);
+        Admin(const Admin &other);
+
+        // Getters and setters
+        bool getIsAdmin() const;
+        void setIsAdmin(bool isa);
+};
+// PassengerAccount class definition
+class PassengerAccount : public Login {
+private:
+    string cnic;
+    string passportNumber;
+    string passportType;
+    bool visaStamp;
+    string accountDetails;
+public:
+    // constructors
+    PassengerAccount();
+    PassengerAccount(string un, string pw, string cnic, string passportNumber, string passportType, bool visaStamp, string accountDetails);
+    PassengerAccount(const PassengerAccount& other);
+
+    // getters and setters
+    string getCNIC();
+    void setCNIC(string cnic);
+
+    string getPassportNumber();
+    void setPassportNumber(string passportNumber);
+
+    string getPassportType();
+    void setPassportType(string passportType);
+
+    bool getVisaStamp();
+    void setVisaStamp(bool visaStamp);
+
+    string getAccountDetails();
+    void setAccountDetails(string accountDetails);
+};
+class Passenger {
+private:
+    int name;
+    string passportNumber;
+    bool isLocal;
+    bool visaStatus;
+    PassengerAccount* login;
+
+public:
+    // Constructors
+    Passenger();
+    Passenger(int name, string passportNumber, bool isLocal, bool visaStatus, PassengerAccount* login);
+    Passenger(const Passenger& other);
+
+    // Getters and Setters
+    int getName();
+    void setName(int name);
+    string getPassportNumber();
+    void setPassportNumber(string passportNumber);
+    bool getIsLocal();
+    void setIsLocal(bool isLocal);
+    bool getVisaStatus();
+    void setVisaStatus(bool visaStatus);
+    PassengerAccount* getLogin();
+    void setLogin(PassengerAccount* login);
+
+    // Member Functions
+    void viewMostVisitedCountry();
+    void viewTravellingCost();
+    void updateDetails();
+};
+
+// Flight class definition
+class Flight {
+private:
+    string departureLocation;
+    string destination;
+    int durationHours;
+    double distanceCovered;
+    bool isInternational;
+public:
+    // constructors
+    Flight();
+    Flight(string departureLocation, string destination, int durationHours, double distanceCovered, bool isInternational);
+    Flight(const Flight& other);
+
+    // getters and setters
+    string getDepartureLocation();
+    void setDepartureLocation(string departureLocation);
+
+    string getDestination();
+    void setDestination(string destination);
+
+    int getDurationHours();
+    void setDurationHours(int durationHours);
+
+    double getDistanceCovered();
+    void setDistanceCovered(double distanceCovered);
+
+    bool getIsInternational();
+    void setIsInternational(bool isInternational);
+};
+
+// FlightSchedule class definition
+class FlightSchedule {
+private:
+    Flight *flights;
+public:
+    // constructors
+    FlightSchedule();
+    FlightSchedule(Flight flights);
+    FlightSchedule(const FlightSchedule& other);
+
+    // getters and setters
+    Flight getFlights();
+    void setFlights(Flight &flights);
+};
+
+// Booking class definition
+class Booking {
+private:
+  
+public:
+    // constructors
+    Booking();
+   
+    Booking(const Booking& other);
+
+};
+
+// PaymentDetails class definition
+class PaymentDetails {
+private:
+    string accountNumber;
+    string routingNumber;
+    string cardNumber;
+    string expiryDate;
+public:
+    // constructors
+    PaymentDetails();
+    PaymentDetails(string accountNumber, string routingNumber, string cardNumber, string expiryDate);
+    PaymentDetails(const PaymentDetails& other);
+
+    // getters and setters
+    string getAccountNumber();
+    void setAccountNumber(string accountNumber);
+
+    string getRoutingNumber();
+    void setRoutingNumber(string routingNumber);
+
+    string getCardNumber();
+    void setCardNumber(string cardNumber);
+
+    string getExpiryDate();
+    void setExpiryDate(string expiryDate);
+};
+
+
+
 int main(){
  
     return 0;
