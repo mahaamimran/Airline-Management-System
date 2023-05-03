@@ -38,7 +38,48 @@ class Airplane {
         string getStatus() const;
         void setStatus(string stat);
 };
-
+Airplane::Airplane() {
+    airplaneID = 0;
+    capacity = 0;
+    isInternational = false;
+    status = "";
+}
+Airplane::Airplane(int id, int cap, bool isInter, string stat) {
+    airplaneID = id;
+    capacity = cap;
+    isInternational = isInter;
+    status = stat;
+}
+Airplane::Airplane(const Airplane &other) {
+    airplaneID = other.airplaneID;
+    capacity = other.capacity;
+    isInternational = other.isInternational;
+    status = other.status;
+}
+int Airplane::getAirplaneID() const {
+    return airplaneID;
+}
+void Airplane::setAirplaneID(int id) {
+    airplaneID = id;
+}
+int Airplane::getCapacity() const {
+    return capacity;
+}
+void Airplane::setCapacity(int cap) {
+    capacity = cap;
+}
+bool Airplane::getIsInternational() const {
+    return isInternational;
+}
+void Airplane::setIsInternational(bool isInter) {
+    isInternational = isInter;
+}
+string Airplane::getStatus() const {
+    return status;
+}
+void Airplane::setStatus(string stat) {
+    status = stat;
+}
 // City class
 class City {
     private:
@@ -60,9 +101,47 @@ class City {
         void setDirection(char dir);
         int getNumofAirplanes() const;
         void setNumofAirplanes(int num);
-        Airplane* getAirplanes() const;
-        void setAirplanes(Airplane* airps);
+        Airplane* getAirplanes(int i) const; // make i airplane thing
+        void setAirplanes(int i, Airplane airps);
 };
+City::City() {
+    name = "";
+    direction = '\0';
+    numofAirplanes = 0;
+    airplanes = nullptr;
+}
+City::City(string nm, char dir, int num, Airplane* airps) {
+    name = nm;
+    direction = dir;
+    numofAirplanes = num;
+    airplanes = new Airplane[num]; // check if you can assign like this
+}
+City::City(const City &other) {
+    name = other.name;
+    direction = other.direction;
+    numofAirplanes = other.numofAirplanes;
+    airplanes = other.airplanes;
+}
+ // Getters and setters
+string City::getName() const {
+    return name;
+}
+void City::setName(string nm) {
+    name = nm;
+}
+char City::getDirection() const {
+    return direction;
+}
+void City::setDirection(char dir) {
+    direction = dir;
+}
+int City::getNumofAirplanes() const {
+    return numofAirplanes;
+}
+void City::setNumofAirplanes(int num) {
+    numofAirplanes = num;
+}
+// set and get airplane
 
 // Country class
 class Country {
@@ -266,9 +345,12 @@ public:
     string getExpiryDate();
     void setExpiryDate(string expiryDate);
 };
+void mainMenu(){
+    cout<<"1. Admin Login"<<endl;
+    cout<<"2. Passenger Login"<<endl;
+    cout<<"3. Exit"<<endl;
 
-
-
+}
 int main(){
  
     return 0;
