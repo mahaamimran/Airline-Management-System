@@ -1,16 +1,6 @@
 // final project
-// Maham 22i-2733
-/*
-- Aggregation:
-    - `City` has an array of `Airplane` objects.
-    - `Country` has an array of `Airplane` objects.
-    - `Passenger` has a `PassengerAccount` object.
-- Composition:
-    - `Flight` is composed of an `Airplane` object and a `Booking` object.
-- Inheritance:
-    - `Admin` inherits from `Login`.
-    - `PassengerAccount` inherits from `Login`.
-*/
+// Maham 22i-2733 SE-F
+
 
 #include <iostream>
 using namespace std;
@@ -183,12 +173,36 @@ class Login {
         string getPassword() const;
         void setPassword(string pw);
 };
+Login::Login() {
+    username = "";
+    password = "";
+}
+Login::Login(string un, string pw) {
+    username = un;
+    password = pw;
+}
+Login::Login(const Login &other) {
+    username = other.username;
+    password = other.password;
+}
+string Login::getUsername() const {
+    return username;
+}
+void Login::setUsername(string un) {
+    username = un;
+}
+string Login::getPassword() const {
+    return password;
+}
+void Login::setPassword(string pw) {
+    password = pw;
+}
+
 
 // Admin class
 class Admin : public Login {
     private:
         bool isAdmin;
-
     public:
         // Constructors
         Admin();
@@ -199,6 +213,23 @@ class Admin : public Login {
         bool getIsAdmin() const;
         void setIsAdmin(bool isa);
 };
+Admin::Admin() {
+    isAdmin = false;
+}
+Admin::Admin(bool isa) {
+    isAdmin = isa;
+}
+Admin::Admin(const Admin &other) {
+    isAdmin = other.isAdmin;
+}
+bool Admin::getIsAdmin() const {
+    return isAdmin;
+}
+void Admin::setIsAdmin(bool isa) {
+    isAdmin = isa;
+}
+
+
 // PassengerAccount class definition
 class PassengerAccount : public Login {
 private:
@@ -228,7 +259,71 @@ public:
 
     string getAccountDetails();
     void setAccountDetails(string accountDetails);
+
+    // member functions
+    bool isValidAccount();
 };
+ PassengerAccount::PassengerAccount() {
+    cnic = "";
+    passportNumber = "";
+    passportType = "";
+    visaStamp = false;
+    accountDetails = "";
+ }
+PassengerAccount::PassengerAccount(string un, string pw, string cnic, string passportNumber, string passportType, bool visaStamp, string accountDetails) : Login(un, pw) {
+    this->cnic = cnic;
+    this->passportNumber = passportNumber;
+    this->passportType = passportType;
+    this->visaStamp = visaStamp;
+    this->accountDetails = accountDetails;   
+}
+PassengerAccount::PassengerAccount(const PassengerAccount& other) : Login(other) {
+    cnic = other.cnic;
+    passportNumber = other.passportNumber;
+    passportType = other.passportType;
+    visaStamp = other.visaStamp;
+    accountDetails = other.accountDetails;   
+}
+string PassengerAccount::getCNIC() {
+    return cnic;
+}
+void PassengerAccount::setCNIC(string cnic) {
+    this->cnic = cnic;
+}
+string PassengerAccount::getPassportNumber() {
+    return passportNumber;
+}
+void PassengerAccount::setPassportNumber(string passportNumber) {
+    this->passportNumber = passportNumber;
+}
+string PassengerAccount::getPassportType() {
+    return passportType;
+}
+void PassengerAccount::setPassportType(string passportType) {
+    this->passportType = passportType;
+}
+bool PassengerAccount::getVisaStamp() {
+    return visaStamp;
+}
+void PassengerAccount::setVisaStamp(bool visaStamp) {
+    this->visaStamp = visaStamp;
+}
+string PassengerAccount::getAccountDetails() {
+    return accountDetails;
+}
+void PassengerAccount::setAccountDetails(string accountDetails) {
+    this->accountDetails = accountDetails;
+}
+bool PassengerAccount::isValidAccount() {
+    if (cnic == "" || passportNumber == "" || passportType == "" || accountDetails == "") {
+        return false;
+    }
+    return true;
+}
+
+
+
+
 class Passenger {
 private:
     int name;
@@ -345,13 +440,104 @@ public:
     string getExpiryDate();
     void setExpiryDate(string expiryDate);
 };
+void passengerLogin(){
+   // creates an object of passenger account and stores the details there
+   PassengerAccount passengerAccount;
+    string username, password, cnic, passportNumber, passportType, accountDetails;
+    bool visaStamp;
+    cout<<"Enter username: ";
+    cin>>username;
+    passengerAccount.setUsername(username);
+    cout<<"Enter password: ";
+    cin>>password;
+    passengerAccount.setPassword(password);
+    cout<<"Enter CNIC: ";
+    cin>>cnic;
+    passengerAccount.setCNIC(cnic);
+    cout<<"Enter passport number: ";
+    cin>>passportNumber;
+    passengerAccount.setPassportNumber(passportNumber);
+    cout<<"Enter passport type: ";
+    cin>>passportType;
+    passengerAccount.setPassportType(passportType);
+    cout<<"Enter visa stamp: (1 for yes, 0 for no)";
+    cin>>visaStamp;
+    passengerAccount.setVisaStamp(visaStamp);
+    cout<<"Enter account details: ";
+    cin>>accountDetails;
+    passengerAccount.setAccountDetails(accountDetails);
+    cout<<"Account created successfully!\n";
+
+
+   
+}
+void adminLogin(){
+    // creates an object of admin and stores the details there
+
+}
+void loginMenu(){
+    cout<<"Are you a passenger or an admin?\n";
+    cout<<"1. Passenger\n";
+    cout<<"2. Admin\n";
+    cout<<"3. Exit\n";
+    int choice;
+    cin>>choice;
+    switch(choice){
+        case 1:
+            // passenger
+            passengerLogin();
+            break;
+        case 2:
+            // admin
+            adminLogin();
+            break;
+        case 3:
+            // exit
+            cout<<"Exiting...\n";
+            break;
+        default:
+            cout<<"Invalid choice\n";
+            break;
+    }
+}
 void mainMenu(){
-    cout<<"1. Admin Login"<<endl;
-    cout<<"2. Passenger Login"<<endl;
-    cout<<"3. Exit"<<endl;
+    cout<<"Are you a registered user?\n";
+    cout<<"1. Yes\n";
+    cout<<"2. No\n";
+    cout<<"3. Exit\n";
+    int choice;
+    cin>>choice;
+    switch(choice){
+        case 1:
+            // login
+            loginMenu();
+            break;
+        case 2:
+            // register
+            // this person can only look up flight schedules
+            break;
+        case 3:
+            // exit
+            cout<<"Exiting...\n";
+            break;
+        default:
+            cout<<"Invalid choice\n";
+            break;
+    }
 
 }
 int main(){
- 
+    mainMenu();
     return 0;
 }
+/*
+- Aggregation:
+    - `City` has an array of `Airplane` objects.
+    - `Country` has an array of `Airplane` objects.
+    - `Passenger` has a `PassengerAccount` object.
+- Composition:
+    - `Flight` is composed of an `Airplane` object and a `Booking` object.
+- Inheritance:
+    - `Admin` inherits from `Login`.
+    - `PassengerAccount` inherits from `Login`.
+*/
