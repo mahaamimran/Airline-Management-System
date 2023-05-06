@@ -2,6 +2,7 @@
 // Maham 22i-2733 SE-F
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 // Airplane class
 class Airplane {
@@ -156,7 +157,7 @@ class Country {
 
 // Login class
 class Login {
-    private:
+    protected:
         string username;
         string password;
 
@@ -255,6 +256,10 @@ void PassengerAccount::updateAccount() {
     // update username and password
 }
 void PassengerAccount::displayAccountDetails() {
+    string pwd="";
+    for(int i=0;i<password.length();i++) pwd+="*";
+    cout<<"username: "<<username<<endl;
+    cout<<"password: "<<pwd<<endl;
     // display username and password
 }
 
@@ -289,7 +294,7 @@ public:
     void viewTravellingCost();
     void updateDetails();
 
-    // overloading << operator
+    // overloading<<operator
     friend ostream& operator<<(ostream& os, const Passenger& p);
 };
 Passenger::Passenger() {
@@ -354,11 +359,12 @@ void Passenger::updateDetails() {
     // update details
 }
 ostream& operator<<(ostream& os, const Passenger& p){
-    os << "Name: " << p.name << endl;
-    os << "Passport Number: " << p.passportNumber << endl;
-    os << "CNIC: " << p.cnic << endl;
-    os << "Login Username: " << p.login->getUsername() << endl;
-    os << "Login Password: " << p.login->getPassword() << endl;
+    os<<"Name: "<<p.name<<endl;
+    os<<"Passport Number: "<<p.passportNumber<<endl;
+    os<<"CNIC: "<<p.cnic<<endl;
+    os<<"Visa Status: "<<p.visaStatus<<endl;
+    os<<"Login Username: "<<p.login->getUsername()<<endl;
+    os<<"Login Password: "<<p.login->getPassword()<<endl;
        
     return os;
 }
@@ -440,25 +446,48 @@ public:
 };
 void passengerLogin(){
    // creates an object of passenger and stores the details there
-    cout << "Enter your name: ";
+    cout<<"Enter your name: ";
     string name;
     cin >> name;
-    cout << "Enter your passport number: ";
+    cout<<"Enter your passport number: ";
     string passportNumber;
     cin >> passportNumber;
-    cout << "Enter your CNIC: ";
+    cout<<"Enter your CNIC: ";
     int cnic;
     cin >> cnic;
-    cout << "Do you have a visa? (1 for yes, 0 for no): ";
+    cout<<"Do you have a visa? (1 for yes, 0 for no): ";
     bool visaStatus;
     cin >> visaStatus;
-    PassengerAccount passengerAccount(name+"_","0S9#4"+name+to_string(visaStatus));
+    PassengerAccount passengerAccount(name+"_",passportNumber[0]+name+to_string(visaStatus));
     Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount);
-   
-    cout << "Your account has been created successfully!\n";
-    cout << "Your account details are as follows:\n";
-    cout << passenger;
-    // store somehow
+    cout<<"Your account has been created successfully!\n";
+    cout<<"Your account details are as follows:\n";
+    cout<<passenger;
+    // storing in a file
+    string logintxt = "/Users/mahamimran/login.txt";
+    ofstream fout;
+    fout.open(logintxt);
+    if(fout.is_open()){
+        fout<<name<<"%"<<passenger.getLogin()->getUsername()<<"%"<<passenger.getLogin()->getPassword()<<endl;
+        // one line per passenger
+    }
+    else cout<<"File not created\n";
+    fout.close();
+
+    Login*PassengerLoginDetailsArr;
+    int amountOfPassengers=1;
+    PassengerLoginDetailsArr = new Login[amountOfPassengers];
+    for(int i=0;i<amountOfPassengers;i++){
+        PassengerLoginDetailsArr[i].setUsername(passenger.getLogin()->getUsername());
+        PassengerLoginDetailsArr[i].setPassword(passenger.getLogin()->getPassword());
+    }
+    //outputting array just to check
+    for(int i=0;i<amountOfPassengers;i++){
+        cout<<PassengerLoginDetailsArr[i].getUsername()<<endl;
+        cout<<PassengerLoginDetailsArr[i].getPassword()<<endl;
+    }
+    
+    
 }
 void adminLogin(){
     // creates an object of admin and stores the details there
