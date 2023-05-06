@@ -233,129 +233,135 @@ void Admin::setIsAdmin(bool isa) {
 // PassengerAccount class definition
 class PassengerAccount : public Login {
 private:
-    string cnic;
-    string passportNumber;
-    string passportType;
-    bool visaStamp;
-    string accountDetails;
 public:
     // constructors
     PassengerAccount();
-    PassengerAccount(string un, string pw, string cnic, string passportNumber, string passportType, bool visaStamp, string accountDetails);
-    PassengerAccount(const PassengerAccount& other);
-
-    // getters and setters
-    string getCNIC();
-    void setCNIC(string cnic);
-
-    string getPassportNumber();
-    void setPassportNumber(string passportNumber);
-
-    string getPassportType();
-    void setPassportType(string passportType);
-
-    bool getVisaStamp();
-    void setVisaStamp(bool visaStamp);
-
-    string getAccountDetails();
-    void setAccountDetails(string accountDetails);
+    PassengerAccount(string un, string pwd);
 
     // member functions
     bool isValidAccount();
+    void updateAccount();
+    void displayAccountDetails(); // '***' instead of pwd
 };
- PassengerAccount::PassengerAccount() {
-    cnic = "";
-    passportNumber = "";
-    passportType = "";
-    visaStamp = false;
-    accountDetails = "";
- }
-PassengerAccount::PassengerAccount(string un, string pw, string cnic, string passportNumber, string passportType, bool visaStamp, string accountDetails) : Login(un, pw) {
-    this->cnic = cnic;
-    this->passportNumber = passportNumber;
-    this->passportType = passportType;
-    this->visaStamp = visaStamp;
-    this->accountDetails = accountDetails;   
+PassengerAccount::PassengerAccount():Login("","") {
 }
-PassengerAccount::PassengerAccount(const PassengerAccount& other) : Login(other) {
-    cnic = other.cnic;
-    passportNumber = other.passportNumber;
-    passportType = other.passportType;
-    visaStamp = other.visaStamp;
-    accountDetails = other.accountDetails;   
+PassengerAccount::PassengerAccount(string un, string pwd):Login(un,pwd) {
 }
-string PassengerAccount::getCNIC() {
-    return cnic;
-}
-void PassengerAccount::setCNIC(string cnic) {
-    this->cnic = cnic;
-}
-string PassengerAccount::getPassportNumber() {
-    return passportNumber;
-}
-void PassengerAccount::setPassportNumber(string passportNumber) {
-    this->passportNumber = passportNumber;
-}
-string PassengerAccount::getPassportType() {
-    return passportType;
-}
-void PassengerAccount::setPassportType(string passportType) {
-    this->passportType = passportType;
-}
-bool PassengerAccount::getVisaStamp() {
-    return visaStamp;
-}
-void PassengerAccount::setVisaStamp(bool visaStamp) {
-    this->visaStamp = visaStamp;
-}
-string PassengerAccount::getAccountDetails() {
-    return accountDetails;
-}
-void PassengerAccount::setAccountDetails(string accountDetails) {
-    this->accountDetails = accountDetails;
-}
+
 bool PassengerAccount::isValidAccount() {
-    if (cnic == "" || passportNumber == "" || passportType == "" || accountDetails == "") {
-        return false;
-    }
+    // check if username and password are valid
     return true;
 }
-
-
-
+void PassengerAccount::updateAccount() {
+    // update username and password
+}
+void PassengerAccount::displayAccountDetails() {
+    // display username and password
+}
 
 class Passenger {
 private:
-    int name;
+    string name;
     string passportNumber;
-    bool isLocal;
+    int cnic;
     bool visaStatus;
     PassengerAccount* login;
 
 public:
     // Constructors
     Passenger();
-    Passenger(int name, string passportNumber, bool isLocal, bool visaStatus, PassengerAccount* login);
-    Passenger(const Passenger& other);
+    Passenger(int nm, string pn, int cn, bool vs, PassengerAccount* lg);
+    Passenger(const Passenger &other);
 
-    // Getters and Setters
-    int getName();
-    void setName(int name);
-    string getPassportNumber();
-    void setPassportNumber(string passportNumber);
-    bool getIsLocal();
-    void setIsLocal(bool isLocal);
-    bool getVisaStatus();
-    void setVisaStatus(bool visaStatus);
-    PassengerAccount* getLogin();
-    void setLogin(PassengerAccount* login);
+    // getters + setters
+    string getName() const;
+    void setName(string nm);
+    string getPassportNumber() const;
+    void setPassportNumber(string pn);
+    int getCnic() const;
+    void setCnic(int cn);
+    bool getVisaStatus() const;
+    void setVisaStatus(bool vs);
+    PassengerAccount* getLogin() const;
+    void setLogin(PassengerAccount* lg);
 
     // Member Functions
     void viewMostVisitedCountry();
     void viewTravellingCost();
     void updateDetails();
-};
 
+    // overloading << operator
+    friend ostream& operator<<(ostream& os, const Passenger& p);
+};
+Passenger::Passenger() {
+    name = "";
+    passportNumber = "";
+    cnic = 0;
+    visaStatus = false;
+    login = nullptr;
+}
+Passenger::Passenger(int nm, string pn, int cn, bool vs, PassengerAccount* lg) {
+    name = nm;
+    passportNumber = pn;
+    cnic = cn;
+    visaStatus = vs;
+    login = lg;
+}
+Passenger::Passenger(const Passenger &other) {
+    name = other.name;
+    passportNumber = other.passportNumber;
+    cnic = other.cnic;
+    visaStatus = other.visaStatus;
+    login = other.login;
+}
+string Passenger::getName() const {
+    return name;
+}
+void Passenger::setName(string nm) {
+    name = nm;
+}
+string Passenger::getPassportNumber() const {
+    return passportNumber;
+}
+void Passenger::setPassportNumber(string pn) {
+    passportNumber = pn;
+}
+int Passenger::getCnic() const {
+    return cnic;
+}
+void Passenger::setCnic(int cn) {
+    cnic = cn;
+}
+bool Passenger::getVisaStatus() const {
+    return visaStatus;
+}
+void Passenger::setVisaStatus(bool vs) {
+    visaStatus = vs;
+}
+PassengerAccount* Passenger::getLogin() const {
+    return login;
+}
+void Passenger::setLogin(PassengerAccount* lg) {
+    login = lg;
+}
+
+void Passenger::viewMostVisitedCountry() {
+    // display most visited country
+}
+void Passenger::viewTravellingCost() {
+    // display travelling cost
+}
+void Passenger::updateDetails() {
+    // update details
+}
+ostream& operator<<(ostream& os, const Passenger& p){
+    os << "Name: " << p.name << endl;
+    os << "Passport Number: " << p.passportNumber << endl;
+    os << "CNIC: " << p.cnic << endl;
+    os << "Visa Status: " << p.visaStatus << endl;
+    os << "Login: " << p.login << endl;
+    return os;
+}
 // Flight class definition
 class Flight {
 private:
@@ -392,14 +398,7 @@ class FlightSchedule {
 private:
     Flight *flights;
 public:
-    // constructors
-    FlightSchedule();
-    FlightSchedule(Flight flights);
-    FlightSchedule(const FlightSchedule& other);
-
-    // getters and setters
-    Flight getFlights();
-    void setFlights(Flight &flights);
+   
 };
 
 // Booking class definition
@@ -409,7 +408,6 @@ private:
 public:
     // constructors
     Booking();
-   
     Booking(const Booking& other);
 
 };
@@ -441,32 +439,33 @@ public:
     void setExpiryDate(string expiryDate);
 };
 void passengerLogin(){
-   // creates an object of passenger account and stores the details there
-   PassengerAccount passengerAccount;
-    string username, password, cnic, passportNumber, passportType, accountDetails;
-    bool visaStamp;
-    cout<<"Enter username: ";
-    cin>>username;
-    passengerAccount.setUsername(username);
-    cout<<"Enter password: ";
-    cin>>password;
-    passengerAccount.setPassword(password);
-    cout<<"Enter CNIC: ";
-    cin>>cnic;
-    passengerAccount.setCNIC(cnic);
-    cout<<"Enter passport number: ";
-    cin>>passportNumber;
-    passengerAccount.setPassportNumber(passportNumber);
-    cout<<"Enter passport type: ";
-    cin>>passportType;
-    passengerAccount.setPassportType(passportType);
-    cout<<"Enter visa stamp: (1 for yes, 0 for no)";
-    cin>>visaStamp;
-    passengerAccount.setVisaStamp(visaStamp);
-    cout<<"Enter account details: ";
-    cin>>accountDetails;
-    passengerAccount.setAccountDetails(accountDetails);
-    cout<<"Account created successfully!\n";
+   // creates an object of passenger and stores the details there
+   PassengerAccount passengerAccount("username", "password");
+   Passenger passenger;
+   cout << "Enter your name: ";
+   string name;
+    cin >> name;
+    passenger.setName(name);
+    cout << "Enter your passport number: ";
+    string passportNumber;
+    cin >> passportNumber;
+    passenger.setPassportNumber(passportNumber);
+    cout << "Enter your CNIC: ";
+    int cnic;
+    cin >> cnic;
+    passenger.setCnic(cnic);
+    cout << "Do you have a visa? (1 for yes, 0 for no): ";
+    bool visaStatus;
+    cin >> visaStatus;
+    passenger.setVisaStatus(visaStatus);
+    passenger.setLogin(&passengerAccount);
+    cout << "Your account has been created successfully!\n";
+    cout << "Your account details are as follows:\n";
+    cout << passenger;
+    
+
+
+
 
 
    
@@ -527,7 +526,7 @@ void mainMenu(){
 
 }
 int main(){
-    mainMenu();
+    passengerLogin();
     return 0;
 }
 /*
