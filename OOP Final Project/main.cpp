@@ -1,7 +1,6 @@
 // final project
 // Maham 22i-2733 SE-F
 
-
 #include <iostream>
 using namespace std;
 // Airplane class
@@ -270,7 +269,7 @@ private:
 public:
     // Constructors
     Passenger();
-    Passenger(int nm, string pn, int cn, bool vs, PassengerAccount* lg);
+    Passenger(string nm, string pn, int cn, bool vs, PassengerAccount* lg);
     Passenger(const Passenger &other);
 
     // getters + setters
@@ -300,7 +299,7 @@ Passenger::Passenger() {
     visaStatus = false;
     login = nullptr;
 }
-Passenger::Passenger(int nm, string pn, int cn, bool vs, PassengerAccount* lg) {
+Passenger::Passenger(string nm, string pn, int cn, bool vs, PassengerAccount* lg) {
     name = nm;
     passportNumber = pn;
     cnic = cn;
@@ -358,8 +357,9 @@ ostream& operator<<(ostream& os, const Passenger& p){
     os << "Name: " << p.name << endl;
     os << "Passport Number: " << p.passportNumber << endl;
     os << "CNIC: " << p.cnic << endl;
-    os << "Visa Status: " << p.visaStatus << endl;
-    os << "Login: " << p.login << endl;
+    os << "Login Username: " << p.login->getUsername() << endl;
+    os << "Login Password: " << p.login->getPassword() << endl;
+       
     return os;
 }
 // Flight class definition
@@ -440,35 +440,25 @@ public:
 };
 void passengerLogin(){
    // creates an object of passenger and stores the details there
-   PassengerAccount passengerAccount("username", "password");
-   Passenger passenger;
-   cout << "Enter your name: ";
-   string name;
+    cout << "Enter your name: ";
+    string name;
     cin >> name;
-    passenger.setName(name);
     cout << "Enter your passport number: ";
     string passportNumber;
     cin >> passportNumber;
-    passenger.setPassportNumber(passportNumber);
     cout << "Enter your CNIC: ";
     int cnic;
     cin >> cnic;
-    passenger.setCnic(cnic);
     cout << "Do you have a visa? (1 for yes, 0 for no): ";
     bool visaStatus;
     cin >> visaStatus;
-    passenger.setVisaStatus(visaStatus);
-    passenger.setLogin(&passengerAccount);
+    PassengerAccount passengerAccount(name+"_","0S9#4"+name+to_string(visaStatus));
+    Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount);
+   
     cout << "Your account has been created successfully!\n";
     cout << "Your account details are as follows:\n";
     cout << passenger;
-    
-
-
-
-
-
-   
+    // store somehow
 }
 void adminLogin(){
     // creates an object of admin and stores the details there
