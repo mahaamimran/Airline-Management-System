@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 // Airplane class
 class Airplane {
@@ -237,24 +238,21 @@ public:
     // constructors
     PassengerAccount();
     PassengerAccount(string un, string pwd);
+    PassengerAccount(const PassengerAccount &other);
 
     // member functions
-    bool isValidAccount();
-    void updateAccount();
     void displayAccountDetails(); // '***' instead of pwd
-};
-PassengerAccount::PassengerAccount():Login("","") {
-}
-PassengerAccount::PassengerAccount(string un, string pwd):Login(un,pwd) {
-}
+    void resetPassword();
+    void resetUsername();
+    // overloading operators
+    bool operator==(const PassengerAccount &other);
+    friend ostream& operator<<(ostream &out, const PassengerAccount &pa);
 
-bool PassengerAccount::isValidAccount() {
-    // check if username and password are valid
-    return true;
-}
-void PassengerAccount::updateAccount() {
-    // update username and password
-}
+    
+};
+PassengerAccount::PassengerAccount():Login("","") {}
+PassengerAccount::PassengerAccount(string un, string pwd):Login(un,pwd) {}
+PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other) {}
 void PassengerAccount::displayAccountDetails() {
     string pwd="";
     for(int i=0;i<password.length();i++) pwd+="*";
@@ -262,6 +260,46 @@ void PassengerAccount::displayAccountDetails() {
     cout<<"password: "<<pwd<<endl;
     // display username and password
 }
+void PassengerAccount::resetPassword() {
+    string pwd;
+    cout<<"Enter new password: ";
+    cin>>pwd;
+    password = pwd;
+}
+void PassengerAccount::resetUsername() {
+    string un;
+    cout<<"Enter new username: ";
+    cin>>un;
+    username = un;
+    fstream f;
+    string line;
+    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
+    // length of username
+    int len = username.length();
+    f.open(logintxt,ios::in);
+    if(f.is_open()){
+             while(!f.eof()){     
+                 getline(f,line);
+                 cout<<line<<endl;
+            }   
+   }
+        else cout<<"file not open"<<endl;
+    f.close();
+
+
+}
+bool PassengerAccount::operator==(const PassengerAccount &other) {
+    if(username==other.username && password==other.password) return true;
+    return false;
+}
+ostream& operator<<(ostream &out, const PassengerAccount &pa) {
+    string pwd="";
+    for(int i=0;i<pa.password.length();i++) pwd+="*";
+    out<<"username: "<<pa.username<<endl;
+    out<<"password: "<<pwd<<endl;
+    return out;
+}
+
 
 class Passenger {
 private:
@@ -364,8 +402,10 @@ ostream& operator<<(ostream& os, const Passenger& p){
     os<<"CNIC: "<<p.cnic<<endl;
     os<<"Visa Status: "<<p.visaStatus<<endl;
     os<<"Login Username: "<<p.login->getUsername()<<endl;
-    os<<"Login Password: "<<p.login->getPassword()<<endl;
-       
+    // displaying *** instead of password
+    string pwd="";
+    for(int i=0;i<p.login->getPassword().length();i++) pwd+="*";
+    os<<"Login Password: "<<pwd<<endl;
     return os;
 }
 // Flight class definition
@@ -452,19 +492,43 @@ void passengerLogin(){
     cout<<"Enter your passport number: ";
     string passportNumber;
     cin >> passportNumber;
-    cout<<"Enter your CNIC: ";
     int cnic;
-    cin >> cnic;
+    cout<<"Enter your CNIC: ";
+    cin>>cnic;
+    // ADD VALIDATION
     cout<<"Do you have a visa? (1 for yes, 0 for no): ";
     bool visaStatus;
     cin >> visaStatus;
-    PassengerAccount passengerAccount(name+"_",passportNumber[0]+name+to_string(visaStatus));
+    cout<<"creating account...\n";
+    cout<<"Your username is: "<<name<<"_"<<endl;
+    cout<<"Enter your password: ";
+    string password;
+    cin >> password;
+    cout<<"Confirm your password: ";
+    string confirmPassword;
+    cin >> confirmPassword;
+    while(password != confirmPassword
+          || password.length() < 8
+          || password.length() > 16
+          || password.find_first_of("0123456789") == string::npos
+          || password.find_first_of("!@#$%^&*()_+") == string::npos
+          || password.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
+          || password.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos) {
+        cout << "Passwords do not match or do not meet the requirements. Please try again." << endl;
+        cout << "Password must be 8-16 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character." << endl;
+        cout << "Enter your password: ";
+        cin >> password;
+        cout << "Confirm your password: ";
+        cin >> confirmPassword;
+    }
+    PassengerAccount passengerAccount(name+"_",password);
     Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount);
     cout<<"Your account has been created successfully!\n";
-    cout<<"Your account details are as follows:\n";
+    cout<<"Your details are as follows:\n";
+    // operator overloading used
     cout<<passenger;
     // storing in a file
-    string logintxt = "/Users/mahamimran/login.txt";
+    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
     ofstream fout;
     fout.open(logintxt);
     if(fout.is_open()){
@@ -473,25 +537,12 @@ void passengerLogin(){
     }
     else cout<<"File not created\n";
     fout.close();
-
-    Login*PassengerLoginDetailsArr;
-    int amountOfPassengers=1;
-    PassengerLoginDetailsArr = new Login[amountOfPassengers];
-    for(int i=0;i<amountOfPassengers;i++){
-        PassengerLoginDetailsArr[i].setUsername(passenger.getLogin()->getUsername());
-        PassengerLoginDetailsArr[i].setPassword(passenger.getLogin()->getPassword());
-    }
-    //outputting array just to check
-    for(int i=0;i<amountOfPassengers;i++){
-        cout<<PassengerLoginDetailsArr[i].getUsername()<<endl;
-        cout<<PassengerLoginDetailsArr[i].getPassword()<<endl;
-    }
-    
     
 }
+
 void adminLogin(){
     // creates an object of admin and stores the details there
-
+ 
 }
 void loginMenu(){
     cout<<"Are you a passenger or an admin?\n";
@@ -504,6 +555,7 @@ void loginMenu(){
         case 1:
             // passenger
             passengerLogin();
+            // add a thing for registering for dependants
             break;
         case 2:
             // admin
@@ -545,7 +597,12 @@ void mainMenu(){
 
 }
 int main(){
-    passengerLogin();
+    PassengerAccount p("maham","12345678");
+    Passenger p1("maham","12345678",123456789,true,&p);
+    p.resetUsername();
+
+
+//    passengerLogin();
     return 0;
 }
 /*
