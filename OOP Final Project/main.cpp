@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 // Airplane class
-class Airplane {
+class Airplane{
     private:
         int airplaneID;
         int capacity;
@@ -16,7 +16,7 @@ class Airplane {
     public:
         // Constructors
         Airplane();
-        Airplane(int id, int cap, bool isInter, string stat);
+        Airplane(int id,int cap,bool isInter,string stat);
         Airplane(const Airplane &other);
 
         // Getters and setters
@@ -29,50 +29,50 @@ class Airplane {
         string getStatus() const;
         void setStatus(string stat);
 };
-Airplane::Airplane() {
+Airplane::Airplane(){
     airplaneID = 0;
     capacity = 0;
     isInternational = false;
     status = "";
 }
-Airplane::Airplane(int id, int cap, bool isInter, string stat) {
+Airplane::Airplane(int id,int cap,bool isInter,string stat){
     airplaneID = id;
     capacity = cap;
     isInternational = isInter;
     status = stat;
 }
-Airplane::Airplane(const Airplane &other) {
+Airplane::Airplane(const Airplane &other){
     airplaneID = other.airplaneID;
     capacity = other.capacity;
     isInternational = other.isInternational;
     status = other.status;
 }
-int Airplane::getAirplaneID() const {
+int Airplane::getAirplaneID() const{
     return airplaneID;
 }
-void Airplane::setAirplaneID(int id) {
+void Airplane::setAirplaneID(int id){
     airplaneID = id;
 }
-int Airplane::getCapacity() const {
+int Airplane::getCapacity() const{
     return capacity;
 }
-void Airplane::setCapacity(int cap) {
+void Airplane::setCapacity(int cap){
     capacity = cap;
 }
-bool Airplane::getIsInternational() const {
+bool Airplane::getIsInternational() const{
     return isInternational;
 }
-void Airplane::setIsInternational(bool isInter) {
+void Airplane::setIsInternational(bool isInter){
     isInternational = isInter;
 }
-string Airplane::getStatus() const {
+string Airplane::getStatus() const{
     return status;
 }
-void Airplane::setStatus(string stat) {
+void Airplane::setStatus(string stat){
     status = stat;
 }
 // City class
-class City {
+class City{
     private:
         string name;
         char direction; // north / south
@@ -82,7 +82,7 @@ class City {
     public:
         // Constructors
         City();
-        City(string nm, char dir, int num, Airplane* airps);
+        City(string nm,char dir,int num,Airplane* airps);
         City(const City &other);
 
         // Getters and setters
@@ -93,49 +93,49 @@ class City {
         int getNumofAirplanes() const;
         void setNumofAirplanes(int num);
         Airplane* getAirplanes(int i) const; // make i airplane thing
-        void setAirplanes(int i, Airplane airps);
+        void setAirplanes(int i,Airplane airps);
 };
-City::City() {
+City::City(){
     name = "";
     direction = '\0';
     numofAirplanes = 0;
     airplanes = nullptr;
 }
-City::City(string nm, char dir, int num, Airplane* airps) {
+City::City(string nm,char dir,int num,Airplane* airps){
     name = nm;
     direction = dir;
     numofAirplanes = num;
     airplanes = new Airplane[num]; // check if you can assign like this
 }
-City::City(const City &other) {
+City::City(const City &other){
     name = other.name;
     direction = other.direction;
     numofAirplanes = other.numofAirplanes;
     airplanes = other.airplanes;
 }
  // Getters and setters
-string City::getName() const {
+string City::getName() const{
     return name;
 }
-void City::setName(string nm) {
+void City::setName(string nm){
     name = nm;
 }
-char City::getDirection() const {
+char City::getDirection() const{
     return direction;
 }
-void City::setDirection(char dir) {
+void City::setDirection(char dir){
     direction = dir;
 }
-int City::getNumofAirplanes() const {
+int City::getNumofAirplanes() const{
     return numofAirplanes;
 }
-void City::setNumofAirplanes(int num) {
+void City::setNumofAirplanes(int num){
     numofAirplanes = num;
 }
 // set and get airplane
 
 // Country class
-class Country {
+class Country{
     private:
         string name;
         int numofAirplanes;
@@ -144,7 +144,7 @@ class Country {
     public:
         // Constructors
         Country();
-        Country(string nm, int num, Airplane* airps);
+        Country(string nm,int num,Airplane* airps);
         Country(const Country &other);
 
         // Getters and setters
@@ -157,7 +157,7 @@ class Country {
 };
 
 // Login class
-class Login {
+class Login{
     protected:
         string username;
         string password;
@@ -165,7 +165,7 @@ class Login {
     public:
         // Constructors
         Login();
-        Login(string un, string pw);
+        Login(string un,string pw);
         Login(const Login &other);
 
         // Getters and setters
@@ -174,34 +174,34 @@ class Login {
         string getPassword() const;
         void setPassword(string pw);
 };
-Login::Login() {
+Login::Login(){
     username = "";
     password = "";
 }
-Login::Login(string un, string pw) {
+Login::Login(string un,string pw){
     username = un;
     password = pw;
 }
-Login::Login(const Login &other) {
+Login::Login(const Login &other){
     username = other.username;
     password = other.password;
 }
-string Login::getUsername() const {
+string Login::getUsername() const{
     return username;
 }
-void Login::setUsername(string un) {
+void Login::setUsername(string un){
     username = un;
 }
-string Login::getPassword() const {
+string Login::getPassword() const{
     return password;
 }
-void Login::setPassword(string pw) {
+void Login::setPassword(string pw){
     password = pw;
 }
 
 
 // Admin class
-class Admin : public Login {
+class Admin : public Login{
     private:
         bool isAdmin;
     public:
@@ -214,19 +214,19 @@ class Admin : public Login {
         bool getIsAdmin() const;
         void setIsAdmin(bool isa);
 };
-Admin::Admin() {
+Admin::Admin(){
     isAdmin = false;
 }
-Admin::Admin(bool isa) {
+Admin::Admin(bool isa){
     isAdmin = isa;
 }
-Admin::Admin(const Admin &other) {
+Admin::Admin(const Admin &other){
     isAdmin = other.isAdmin;
 }
-bool Admin::getIsAdmin() const {
+bool Admin::getIsAdmin() const{
     return isAdmin;
 }
-void Admin::setIsAdmin(bool isa) {
+void Admin::setIsAdmin(bool isa){
     isAdmin = isa;
 }
 
@@ -236,7 +236,7 @@ class PassengerAccount : public Login{
 public:
     // constructors
     PassengerAccount();
-    PassengerAccount(string un, string pwd);
+    PassengerAccount(string un,string pwd);
     PassengerAccount(const PassengerAccount &other);
 
     // member functions
@@ -245,40 +245,40 @@ public:
     void resetUsername(string name);
     // overloading operators
     bool operator==(const PassengerAccount &other);
-    friend ostream& operator<<(ostream &out, const PassengerAccount &pa);
+    friend ostream& operator<<(ostream &out,const PassengerAccount &pa);
 };
-void storePassengerDetailsinFile(PassengerAccount passengerAccount, string name){
+void storePassengerDetailsinFile(PassengerAccount passengerAccount,string name){
     // WOHHOOO IT WORKED
     // open the input file for reading
     string logintxt = "/Users/mahamimran/PassengerLogin.txt";
     ifstream fin(logintxt);
-    if (!fin) {
-        cout << "Error opening input file: " << logintxt << endl;
+    if (!fin){
+        cout<<"Error opening input file: "<<logintxt<<endl;
         return;
     }
     // open a temporary output file for writing
     string tempFile = "/Users/mahamimran/PassengerLogin_temp.txt";
     ofstream fout(tempFile);
-    if (!fout) {
-        cout << "Error opening temporary output file: " << tempFile << endl;
+    if (!fout){
+        cout<<"Error opening temporary output file: "<<tempFile<<endl;
         fin.close();
         return;
     }
     // loop through each line in the input file
     bool found = false;
     string line;
-    while (getline(fin, line)) {
+    while (getline(fin,line)){
         // check if the line matches the passenger's name
-        if (line.substr(0, name.length()) == name) {
-            fout << name << "%" << passengerAccount.getUsername() << "%" << passengerAccount.getPassword() << endl;
+        if (line.substr(0,name.length()) == name){
+            fout<<name<<"%"<<passengerAccount.getUsername()<<"%"<<passengerAccount.getPassword()<<endl;
             found = true;
         }
-        else fout << line << endl;
+        else fout<<line<<endl;
         
     }
-    // if no matching line was found, add a new line for the passenger at the end of the file
-    if (!found) {
-        fout << name << "%" << passengerAccount.getUsername() << "%" << passengerAccount.getPassword() << endl;
+    // if no matching line was found,add a new line for the passenger at the end of the file
+    if (!found){
+        fout<<name<<"%"<<passengerAccount.getUsername()<<"%"<<passengerAccount.getPassword()<<endl;
     }
     // close the input and output files
     fin.close();
@@ -286,20 +286,20 @@ void storePassengerDetailsinFile(PassengerAccount passengerAccount, string name)
 
     // delete the original input file and rename the temporary output file to the original filename
     remove(logintxt.c_str());
-    rename(tempFile.c_str(), logintxt.c_str());
+    rename(tempFile.c_str(),logintxt.c_str());
 }
 
-PassengerAccount::PassengerAccount():Login("","") {}
-PassengerAccount::PassengerAccount(string un, string pwd):Login(un,pwd) {}
-PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other) {}
-void PassengerAccount::displayAccountDetails() {
+PassengerAccount::PassengerAccount():Login("",""){}
+PassengerAccount::PassengerAccount(string un,string pwd):Login(un,pwd){}
+PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other){}
+void PassengerAccount::displayAccountDetails(){
     string pwd="";
     for(int i=0;i<password.length();i++) pwd+="*";
     cout<<"username: "<<username<<endl;
     cout<<"password: "<<pwd<<endl;
     // display username and password
 }
-void PassengerAccount::resetPassword(string name) {
+void PassengerAccount::resetPassword(string name){
     string pwd;
     cout<<"Enter new Password: ";
     cin>>pwd;
@@ -308,7 +308,7 @@ void PassengerAccount::resetPassword(string name) {
     PassengerAccount pa(username,password);
     storePassengerDetailsinFile(pa,name);
 }
-void PassengerAccount::resetUsername(string name) {
+void PassengerAccount::resetUsername(string name){
     string un;
     cout<<"Enter new username: ";
     cin>>un;
@@ -319,11 +319,11 @@ void PassengerAccount::resetUsername(string name) {
 
 }
 
-bool PassengerAccount::operator==(const PassengerAccount &other) {
+bool PassengerAccount::operator==(const PassengerAccount &other){
     if(username==other.username && password==other.password) return true;
     return false;
 }
-ostream& operator<<(ostream &out, const PassengerAccount &pa) {
+ostream& operator<<(ostream &out,const PassengerAccount &pa){
     string pwd="";
     for(int i=0;i<pa.password.length();i++) pwd+="*";
     out<<"username: "<<pa.username<<endl;
@@ -331,19 +331,72 @@ ostream& operator<<(ostream &out, const PassengerAccount &pa) {
     return out;
 }
 
+// PaymentDetails class definition
+class PaymentDetails{
+private:
+    string cardNumber;
+    string expiryDate;
+    int cvv;
+public:
+    // constructors
+    PaymentDetails();
+    PaymentDetails(string cn,string ed,int cv);
+    PaymentDetails(const PaymentDetails &other);
+    // getters and setters
+    string getCardNumber() const;
+    void setCardNumber(string cn);
+    string getExpiryDate() const;
+    void setExpiryDate(string ed);
+    int getCvv() const;
+    void setCvv(int cv);
+};
+PaymentDetails::PaymentDetails(){
+    cardNumber = "";
+    expiryDate = "";
+    cvv = 0;
+}
+PaymentDetails::PaymentDetails(string cn,string ed,int cv){
+    cardNumber = cn;
+    expiryDate = ed;
+    cvv = cv;
+}
+PaymentDetails::PaymentDetails(const PaymentDetails &other){
+    cardNumber = other.cardNumber;
+    expiryDate = other.expiryDate;
+    cvv = other.cvv;
+}
+string PaymentDetails::getCardNumber() const{
+    return cardNumber;
+}
+void PaymentDetails::setCardNumber(string cn){
+    cardNumber = cn;
+}
+string PaymentDetails::getExpiryDate() const{
+    return expiryDate;
+}
+void PaymentDetails::setExpiryDate(string ed){
+    expiryDate = ed;
+}
+int PaymentDetails::getCvv() const{
+    return cvv;
+}
+void PaymentDetails::setCvv(int cv){
+    cvv = cv;
+}
 
-class Passenger {
+class Passenger{
 private:
     string name;
     string passportNumber;
     int cnic;
     bool visaStatus;
     PassengerAccount* login;
+    PaymentDetails* paymentDetails;
 
 public:
     // Constructors
     Passenger();
-    Passenger(string nm, string pn, int cn, bool vs, PassengerAccount* lg);
+    Passenger(string nm,string pn,int cn,bool vs,PassengerAccount* lg,PaymentDetails* pd);
     Passenger(const Passenger &other);
 
     // getters + setters
@@ -357,6 +410,8 @@ public:
     void setVisaStatus(bool vs);
     PassengerAccount* getLogin() const;
     void setLogin(PassengerAccount* lg);
+    PaymentDetails* getPaymentDetails() const;
+    void setPaymentDetails(PaymentDetails* pd);
 
     // Member Functions
     void viewMostVisitedCountry();
@@ -364,70 +419,80 @@ public:
     void updateDetails();
 
     // overloading<<operator
-    friend ostream& operator<<(ostream& os, const Passenger& p);
+    friend ostream& operator<<(ostream& os,const Passenger& p);
 };
-Passenger::Passenger() {
+Passenger::Passenger(){
     name = "";
     passportNumber = "";
     cnic = 0;
     visaStatus = false;
     login = nullptr;
+    paymentDetails = nullptr;
 }
-Passenger::Passenger(string nm, string pn, int cn, bool vs, PassengerAccount* lg) {
+Passenger::Passenger(string nm,string pn,int cn,bool vs,PassengerAccount* lg,PaymentDetails* pd){
     name = nm;
     passportNumber = pn;
     cnic = cn;
     visaStatus = vs;
     login = lg;
+    paymentDetails = pd;
 }
-Passenger::Passenger(const Passenger &other) {
+Passenger::Passenger(const Passenger &other){
     name = other.name;
     passportNumber = other.passportNumber;
     cnic = other.cnic;
     visaStatus = other.visaStatus;
     login = other.login;
+    paymentDetails = other.paymentDetails;
 }
-string Passenger::getName() const {
+string Passenger::getName() const{
     return name;
 }
-void Passenger::setName(string nm) {
+void Passenger::setName(string nm){
     name = nm;
 }
-string Passenger::getPassportNumber() const {
+string Passenger::getPassportNumber() const{
     return passportNumber;
 }
-void Passenger::setPassportNumber(string pn) {
+void Passenger::setPassportNumber(string pn){
     passportNumber = pn;
 }
-int Passenger::getCnic() const {
+int Passenger::getCnic() const{
     return cnic;
 }
-void Passenger::setCnic(int cn) {
+void Passenger::setCnic(int cn){
     cnic = cn;
 }
-bool Passenger::getVisaStatus() const {
+bool Passenger::getVisaStatus() const{
     return visaStatus;
 }
-void Passenger::setVisaStatus(bool vs) {
+void Passenger::setVisaStatus(bool vs){
     visaStatus = vs;
 }
-PassengerAccount* Passenger::getLogin() const {
+PassengerAccount* Passenger::getLogin() const{
     return login;
 }
-void Passenger::setLogin(PassengerAccount* lg) {
+void Passenger::setLogin(PassengerAccount* lg){
     login = lg;
 }
+PaymentDetails* Passenger::getPaymentDetails() const{
+    return paymentDetails;
+}
+void Passenger::setPaymentDetails(PaymentDetails* pd){
+    paymentDetails = pd;
+}
 
-void Passenger::viewMostVisitedCountry() {
+
+void Passenger::viewMostVisitedCountry(){
     // display most visited country
 }
-void Passenger::viewTravellingCost() {
+void Passenger::viewTravellingCost(){
     // display travelling cost
 }
-void Passenger::updateDetails() {
+void Passenger::updateDetails(){
     // update details
 }
-ostream& operator<<(ostream& os, const Passenger& p){
+ostream& operator<<(ostream& os,const Passenger& p){
     os<<"Name: "<<p.name<<endl;
     os<<"Passport Number: "<<p.passportNumber<<endl;
     os<<"CNIC: "<<p.cnic<<endl;
@@ -440,7 +505,7 @@ ostream& operator<<(ostream& os, const Passenger& p){
     return os;
 }
 // Flight class definition
-class Flight {
+class Flight{
 private:
     string departureLocation;
     string destination;
@@ -450,7 +515,7 @@ private:
 public:
     // constructors
     Flight();
-    Flight(string departureLocation, string destination, int durationHours, double distanceCovered, bool isInternational);
+    Flight(string departureLocation,string destination,int durationHours,double distanceCovered,bool isInternational);
     Flight(const Flight& other);
 
     // getters and setters
@@ -471,7 +536,7 @@ public:
 };
 
 // FlightSchedule class definition
-class FlightSchedule {
+class FlightSchedule{
 private:
     Flight *flights;
 public:
@@ -479,7 +544,7 @@ public:
 };
 
 // Booking class definition
-class Booking {
+class Booking{
 private:
   
 public:
@@ -489,32 +554,7 @@ public:
 
 };
 
-// PaymentDetails class definition
-class PaymentDetails {
-private:
-    string accountNumber;
-    string routingNumber;
-    string cardNumber;
-    string expiryDate;
-public:
-    // constructors
-    PaymentDetails();
-    PaymentDetails(string accountNumber, string routingNumber, string cardNumber, string expiryDate);
-    PaymentDetails(const PaymentDetails& other);
 
-    // getters and setters
-    string getAccountNumber();
-    void setAccountNumber(string accountNumber);
-
-    string getRoutingNumber();
-    void setRoutingNumber(string routingNumber);
-
-    string getCardNumber();
-    void setCardNumber(string cardNumber);
-
-    string getExpiryDate();
-    void setExpiryDate(string expiryDate);
-};
 
 void passengerLogin(){
    // creates an object of passenger and stores the details there
@@ -528,9 +568,18 @@ void passengerLogin(){
     cout<<"Enter your CNIC: ";
     cin>>cnic;
     // ADD VALIDATION
-    cout<<"Do you have a visa? (1 for yes, 0 for no): ";
+    cout<<"Do you have a visa? (1 for yes,0 for no): ";
     bool visaStatus;
     cin >> visaStatus;
+    cout<<"Enter your card number: ";
+    string cardNumber;
+    cin >> cardNumber;
+    cout<<"Enter your card expiry date: ";
+    string expiryDate;
+    cin >> expiryDate;
+    cout<<"Enter your card CVV: ";
+    int cvv;
+    cin >> cvv;
     cout<<"creating account...\n";
     cout<<"Your username is: "<<name<<"_"<<endl;
     cout<<"Enter your password: ";
@@ -545,16 +594,18 @@ void passengerLogin(){
           || password.find_first_of("0123456789") == string::npos
           || password.find_first_of("!@#$%^&*()_+") == string::npos
           || password.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
-          || password.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos) {
-        cout << "Passwords do not match or do not meet the requirements. Please try again." << endl;
-        cout << "Password must be 8-16 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character." << endl;
-        cout << "Enter your password: ";
+          || password.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
+        cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
+        cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
+        cout<<"Enter your password: ";
         cin >> password;
-        cout << "Confirm your password: ";
+        cout<<"Confirm your password: ";
         cin >> confirmPassword;
     }
+
+    PaymentDetails paymentDetails(cardNumber,expiryDate,cvv);
     PassengerAccount passengerAccount(name+"_",password);
-    Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount);
+    Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount,&paymentDetails);
     cout<<"Your account has been created successfully!\n";
     cout<<"Your details are as follows:\n";
     // operator overloading used
