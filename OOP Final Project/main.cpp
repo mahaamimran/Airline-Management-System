@@ -200,36 +200,44 @@ void Login::setPassword(string pw){
 }
 
 
-// Admin class
-class Admin : public Login{
-    private:
-        bool isAdmin;
-    public:
-        // Constructors
-        Admin();
-        Admin(bool isa);
-        Admin(const Admin &other);
+// AdminAccount class
+class AdminAccount : public Login{
+public:
+   // Constructors
+    AdminAccount();
+    AdminAccount(string un,string pw);
+    AdminAccount(const AdminAccount &other);
 
-        // Getters and setters
-        bool getIsAdmin() const;
-        void setIsAdmin(bool isa);
+    // member functions
+    void displayAccountDetails(); // '***' instead of pwd
+    void changeFlightSchedule();
+    void addNewRoute();
+    void restrictNumberofPassengers();
+    void updateInquiryDetails();
 };
-Admin::Admin(){
-    isAdmin = false;
+AdminAccount::AdminAccount():Login("",""){}
+AdminAccount::AdminAccount(string un,string pw):Login(un,pw){}
+AdminAccount::AdminAccount(const AdminAccount &other):Login(other){}
+void AdminAccount::displayAccountDetails(){
+    cout<<"Username: "<<username<<endl;
+    cout<<"Password: ";
+    for (int i=0;i<password.length();i++){
+        cout<<"*";
+    }
+    cout<<endl;
 }
-Admin::Admin(bool isa){
-    isAdmin = isa;
+void AdminAccount::changeFlightSchedule(){
+    // change flight schedule
 }
-Admin::Admin(const Admin &other){
-    isAdmin = other.isAdmin;
+void AdminAccount::addNewRoute(){
+    // add new route
 }
-bool Admin::getIsAdmin() const{
-    return isAdmin;
+void AdminAccount::restrictNumberofPassengers(){
+    // restrict number of passengers
 }
-void Admin::setIsAdmin(bool isa){
-    isAdmin = isa;
+void AdminAccount::updateInquiryDetails(){
+    // update inquiry details
 }
-
 
 // PassengerAccount class definition
 class PassengerAccount : public Login{
@@ -300,11 +308,28 @@ void PassengerAccount::displayAccountDetails(){
     // display username and password
 }
 void PassengerAccount::resetPassword(string name){
+    cout<<"Enter new password: ";
     string pwd;
-    cout<<"Enter new Password: ";
-    cin>>pwd;
+    cin >> pwd;
+    cout<<"Confirm your password: ";
+    string confirmPassword;
+    cin >> confirmPassword;
+    while(pwd != confirmPassword
+          || pwd.length() < 8
+          || pwd.length() > 16
+          || pwd.find_first_of("0123456789") == string::npos
+          || pwd.find_first_of("!@#$%^&*()_+") == string::npos
+          || pwd.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
+          || pwd.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
+        cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
+        cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
+        cout<<"Enter your password: ";
+        cin >> pwd;
+        cout<<"Confirm your password: ";
+        cin >> confirmPassword;
+    }
     password = pwd;
-    // update username in file
+     // update username in file
     PassengerAccount pa(username,password);
     storePassengerDetailsinFile(pa,name);
 }
@@ -642,8 +667,6 @@ void passengerRegistration(){
     cout<<passenger;
     // storing in a file
     storePassengerDetailsinFile(passengerAccount,name);
-    // passengerAccount.resetUsername(name);
-    // passengerAccount.resetPassword(name);
     // menu should inlude booking flights etc
     // resetting password option should also be available
 }
@@ -660,20 +683,20 @@ void passengerLogin(){
     fin.open("/Users/mahamimran/PassengerLogin.txt",ios::in);
     string line;
     bool found = false;
+    string name = "";
     while(fin){
         getline(fin,line);
         if(line.find("%" + username + "%" + password) != string::npos){
             found = true;
             cout<<"login succesful"<<endl;
             size_t pos = line.find('%');
-            string name = line.substr(0, pos);
+            name = line.substr(0, pos);
             cout<<"Welcome "<<name<<"!"<<endl;
             break;
         }
-        else cout<<"incorect username or password entered\n"<<endl;
     }
+    if(!found)cout<<"Invalid username or password. Please try again."<<endl;
     fin.close();
-
     // object for passenger created 
     PassengerAccount passengerAccount(username,password);
     if(found){
@@ -684,7 +707,8 @@ void passengerLogin(){
         cout<<"1. Book a flight\n";
         cout<<"2. Reset username\n";
         cout<<"3. Reset password\n";
-        cout<<"3. Exit\n";
+        cout<<"4. Display account details\n";
+        cout<<"5. Exit\n";
         int choice;
         cin>>choice;
         switch(choice){
@@ -700,6 +724,10 @@ void passengerLogin(){
                 passengerAccount.resetPassword(name);
                 break;
             case 4:
+                // display account details
+                passengerAccount.displayAccountDetails();
+                break;
+            case 5:
                 // exit
                 cout<<"exiting..."<<endl;
                 break;
@@ -718,30 +746,106 @@ void passengerLogin(){
 }
 void adminLogin(){
     // creates an object of admin and stores the details there
-    
+     cout<<"Enter your username: ";
+    string username;
+    cin >> username;
+    cout<<"Enter your password: ";
+    string password;
+    cin >> password;
+    // check if username and password match
+    // read file
+    fstream fin;
+    fin.open("/Users/mahamimran/AdminLogin.txt",ios::in);
+    string line;
+    bool found = false;
+    string name = "";
+    while(fin){
+        getline(fin,line);
+        if(line.find("%" + username + "%" + password) != string::npos){
+            found = true;
+            cout<<"login succesful"<<endl;
+            size_t pos = line.find('%');
+            name = line.substr(0, pos);
+            cout<<"Welcome "<<name<<"!"<<endl;
+            break;
+        }
+    }
+    if(!found)cout<<"Invalid username or password. Please try again."<<endl;
+    fin.close();
+    // object for admin created 
+    AdminAccount adminAccount(username,password);
+    if(found){
+        cout<<"What action would you like to perform?\n";
+        cout<<"1. Display login details\n";
+        cout<<"2. Change Flight Schedule\n";
+        cout<<"3. Add new route\n";
+        cout<<"4. Restrict number of passengers\n";
+        cout<<"5. Update inquiry details\n";
+        cout<<"6. Exit\n";
+        int choice;
+        cin>>choice;
+        switch(choice){
+            case 1:
+                // display login details
+                adminAccount.displayLoginDetails();
+                break;
+            case 2:
+                // change flight schedule
+                adminAccount.changeFlightSchedule();
+                break;
+            case 3:
+                // add new route
+                adminAccount.addNewRoute();
+                break;
+            case 4:
+                // restrict number of passengers
+                adminAccount.restrictNumberOfPassengers();
+                break;
+            case 5:
+                // update inquiry details
+                adminAccount.updateInquiryDetails();
+                break;
+            case 6:
+                // exit
+                cout<<"exiting..."<<endl;
+                break;
+            default:
+                cout<<"Invalid choice entered. Please try again.\n";
+        }
+    }
+    else{
+        adminLogin();
+    }
+
 }
-void loginMenu(){
+void mainMenu(){
+    int choice=0;
+    while(choice!=3){
     cout<<"Are you a passenger or an admin?\n";
-    cout<<"1. New Passenger\n";
+    cout<<"1. Passenger\n";
     cout<<"2. Admin\n";
     cout<<"3. Exit\n";
-    int choice;
     cin>>choice;
     switch(choice){
         case 1:
             cout<<"Do you have an existing account?\n";
-            cout<<"1. No\n";
-            cout<<"2. Yes\n";
+            cout<<"1. Yes\n";
+            cout<<"2. No\n";
+            cout<<"3. Exit\n";
             int choice2;
             cin>>choice2;
             switch(choice2){
                 case 1:
+                    // login
+                    passengerLogin();
+                    break;
+                case 2:
                     // register
                     passengerRegistration();
                     break;
-                case 2:
-                    // login
-                    passengerLogin();
+                case 3:
+                    // exit
+                    cout<<"Exiting...\n";
                     break;
                 default:
                     cout<<"Invalid choice\n";
@@ -760,34 +864,9 @@ void loginMenu(){
             cout<<"Invalid choice\n";
             break;
     }
-}
-void mainMenu(){
-    cout<<"Are you a registered user?\n";
-    cout<<"1. Yes\n";
-    cout<<"2. No\n";
-    cout<<"3. Exit\n";
-    int choice;
-    cin>>choice;
-    switch(choice){
-        case 1:
-            // login
-            loginMenu();
-            break;
-        case 2:
-            // register
-            // this person can only look up flight schedules
-            break;
-        case 3:
-            // exit
-            cout<<"Exiting...\n";
-            break;
-        default:
-            cout<<"Invalid choice\n";
-            break;
     }
-
 }
 int main(){
- passengerLogin();
+ mainMenu();
     return 0;
 }
