@@ -336,26 +336,26 @@ class PaymentDetails{
 private:
     string cardNumber;
     string expiryDate;
-    int cvv;
+    string cvv;
 public:
     // constructors
     PaymentDetails();
-    PaymentDetails(string cn,string ed,int cv);
+    PaymentDetails(string cn,string ed,string cv);
     PaymentDetails(const PaymentDetails &other);
     // getters and setters
     string getCardNumber() const;
     void setCardNumber(string cn);
     string getExpiryDate() const;
     void setExpiryDate(string ed);
-    int getCvv() const;
-    void setCvv(int cv);
+    string getCvv() const;
+    void setCvv(string cv);
 };
 PaymentDetails::PaymentDetails(){
     cardNumber = "";
     expiryDate = "";
-    cvv = 0;
+    cvv = "";
 }
-PaymentDetails::PaymentDetails(string cn,string ed,int cv){
+PaymentDetails::PaymentDetails(string cn,string ed,string cv){
     cardNumber = cn;
     expiryDate = ed;
     cvv = cv;
@@ -377,10 +377,10 @@ string PaymentDetails::getExpiryDate() const{
 void PaymentDetails::setExpiryDate(string ed){
     expiryDate = ed;
 }
-int PaymentDetails::getCvv() const{
+string PaymentDetails::getCvv() const{
     return cvv;
 }
-void PaymentDetails::setCvv(int cv){
+void PaymentDetails::setCvv(string cv){
     cvv = cv;
 }
 
@@ -553,11 +553,25 @@ public:
     Booking(const Booking& other);
 
 };
-
-
+bool verifyFinancialDetails(PaymentDetails* pd){
+// verify financial details
+    if(pd->getCardNumber().length()!=16 || pd->getCvv().length()!=3 || pd->getExpiryDate().length()!=5){
+        cout<<"Invalid details entered. Please try again."<<endl;
+        return false;
+    }
+    else{
+        cout<<"Valid Payment details!"<<endl;
+        return true;
+    }
+}
 
 void passengerLogin(){
    // creates an object of passenger and stores the details there
+    cout<<"Are you registering for yourself or an under 18 dependant?\n";
+    cout<<"1. Myself\n";
+    cout<<"2. Dependant\n";
+    int choice;
+    cin>>choice;
     cout<<"Enter your name: ";
     string name;
     cin >> name;
@@ -565,21 +579,39 @@ void passengerLogin(){
     string passportNumber;
     cin >> passportNumber;
     int cnic;
-    cout<<"Enter your CNIC: ";
+    cout<<"Enter your CNIC (13 digits): ";
     cin>>cnic;
     // ADD VALIDATION
+    // 13 digits, not previously in record :/
     cout<<"Do you have a visa? (1 for yes,0 for no): ";
     bool visaStatus;
     cin >> visaStatus;
-    cout<<"Enter your card number: ";
-    string cardNumber;
-    cin >> cardNumber;
-    cout<<"Enter your card expiry date: ";
-    string expiryDate;
-    cin >> expiryDate;
-    cout<<"Enter your card CVV: ";
-    int cvv;
-    cin >> cvv;
+  
+    bool isValid = false;
+    PaymentDetails paymentDetails;
+    while(!isValid){
+        // Get card number
+        string cn;
+        cout << "Enter card number (16 digits): ";
+        cin >> cn;
+        paymentDetails.setCardNumber(cn);
+
+        // Get expiry date
+        string ed;
+        cout << "Enter expiry date (MM/YY): ";
+        cin >> ed;
+        paymentDetails.setExpiryDate(ed);
+
+        // Get CVV
+        string cvv;
+        cout << "Enter CVV (3 digits): ";
+        cin >> cvv;
+        paymentDetails.setCvv(cvv);
+        
+        // Verify details
+        isValid = verifyFinancialDetails(&paymentDetails);
+    }
+    // create passenger account
     cout<<"creating account...\n";
     cout<<"Your username is: "<<name<<"_"<<endl;
     cout<<"Enter your password: ";
@@ -602,8 +634,6 @@ void passengerLogin(){
         cout<<"Confirm your password: ";
         cin >> confirmPassword;
     }
-
-    PaymentDetails paymentDetails(cardNumber,expiryDate,cvv);
     PassengerAccount passengerAccount(name+"_",password);
     Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount,&paymentDetails);
     cout<<"Your account has been created successfully!\n";
@@ -612,9 +642,8 @@ void passengerLogin(){
     cout<<passenger;
     // storing in a file
     storePassengerDetailsinFile(passengerAccount,name);
-    passengerAccount.resetUsername(name);
-    passengerAccount.resetPassword(name);
-    
+    //passengerAccount.resetUsername(name);
+    //passengerAccount.resetPassword(name);
 }
 
 void adminLogin(){
@@ -677,14 +706,3 @@ int main(){
  passengerLogin();
     return 0;
 }
-/*
-- Aggregation:
-    - `City` has an array of `Airplane` objects.
-    - `Country` has an array of `Airplane` objects.
-    - `Passenger` has a `PassengerAccount` object.
-- Composition:
-    - `Flight` is composed of an `Airplane` object and a `Booking` object.
-- Inheritance:
-    - `Admin` inherits from `Login`.
-    - `PassengerAccount` inherits from `Login`.
-*/
