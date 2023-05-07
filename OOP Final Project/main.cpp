@@ -565,7 +565,7 @@ bool verifyFinancialDetails(PaymentDetails* pd){
     }
 }
 
-void passengerLogin(){
+void passengerRegistration(){
    // creates an object of passenger and stores the details there
     cout<<"Are you registering for yourself or an under 18 dependant?\n";
     cout<<"1. Myself\n";
@@ -642,26 +642,111 @@ void passengerLogin(){
     cout<<passenger;
     // storing in a file
     storePassengerDetailsinFile(passengerAccount,name);
-    //passengerAccount.resetUsername(name);
-    //passengerAccount.resetPassword(name);
+    // passengerAccount.resetUsername(name);
+    // passengerAccount.resetPassword(name);
+    // menu should inlude booking flights etc
+    // resetting password option should also be available
 }
+void passengerLogin(){
+    cout<<"Enter your username: ";
+    string username;
+    cin >> username;
+    cout<<"Enter your password: ";
+    string password;
+    cin >> password;
+    // check if username and password match
+    // read file
+    fstream fin;
+    fin.open("/Users/mahamimran/PassengerLogin.txt",ios::in);
+    string line;
+    bool found = false;
+    while(fin){
+        getline(fin,line);
+        if(line.find("%" + username + "%" + password) != string::npos){
+            found = true;
+            cout<<"login succesful"<<endl;
+            size_t pos = line.find('%');
+            string name = line.substr(0, pos);
+            cout<<"Welcome "<<name<<"!"<<endl;
+            break;
+        }
+        else cout<<"incorect username or password entered\n"<<endl;
+    }
+    fin.close();
 
+    // object for passenger created 
+    PassengerAccount passengerAccount(username,password);
+    if(found){
+        // display menu
+        // menu should inlude booking flights etc
+        // resetting password option should also be available
+        cout<<"What action would you like to perform?\n";
+        cout<<"1. Book a flight\n";
+        cout<<"2. Reset username\n";
+        cout<<"3. Reset password\n";
+        cout<<"3. Exit\n";
+        int choice;
+        cin>>choice;
+        switch(choice){
+            case 1:
+                // book a flight
+                break;
+            case 2:
+                // reset username
+                passengerAccount.resetUsername(name);
+                break;
+            case 3:
+                // reset password
+                passengerAccount.resetPassword(name);
+                break;
+            case 4:
+                // exit
+                cout<<"exiting..."<<endl;
+                break;
+            default:
+                cout<<"Invalid choice entered. Please try again.\n";
+                break;
+        }
+    }
+    else{
+        passengerLogin();
+    }
+    // if yes, then display menu
+    // if no, then display error message
+    // menu should inlude booking flights etc
+    // resetting password option should also be available
+}
 void adminLogin(){
     // creates an object of admin and stores the details there
- 
+    
 }
 void loginMenu(){
     cout<<"Are you a passenger or an admin?\n";
-    cout<<"1. Passenger\n";
+    cout<<"1. New Passenger\n";
     cout<<"2. Admin\n";
     cout<<"3. Exit\n";
     int choice;
     cin>>choice;
     switch(choice){
         case 1:
-            // passenger
-            passengerLogin();
-            // add a thing for registering for dependants
+            cout<<"Do you have an existing account?\n";
+            cout<<"1. No\n";
+            cout<<"2. Yes\n";
+            int choice2;
+            cin>>choice2;
+            switch(choice2){
+                case 1:
+                    // register
+                    passengerRegistration();
+                    break;
+                case 2:
+                    // login
+                    passengerLogin();
+                    break;
+                default:
+                    cout<<"Invalid choice\n";
+                    break;
+            }
             break;
         case 2:
             // admin
