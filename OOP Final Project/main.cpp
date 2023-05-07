@@ -1,4 +1,3 @@
-// final project
 // Maham 22i-2733 SE-F
 
 #include <iostream>
@@ -6,155 +5,42 @@
 #include <string>
 using namespace std;
 // Airplane class
-class Airplane{
-    private:
-        int airplaneID;
-        int capacity;
-        bool isInternational;
-        string status; // in air / landed
-
-    public:
-        // Constructors
-        Airplane();
-        Airplane(int id,int cap,bool isInter,string stat);
-        Airplane(const Airplane &other);
-
-        // Getters and setters
-        int getAirplaneID() const;
-        void setAirplaneID(int id);
-        int getCapacity() const;
-        void setCapacity(int cap);
-        bool getIsInternational() const;
-        void setIsInternational(bool isInter);
-        string getStatus() const;
-        void setStatus(string stat);
+class Airplane{ 
+private:
+    int airplaneID;
+    int capacity;
+    bool isInternational;
+    string status; // in air / landed
+    int numofPassengers; //  total 60, 30 can sit (capacity/2)
 };
-Airplane::Airplane(){
-    airplaneID = 0;
-    capacity = 0;
-    isInternational = false;
-    status = "";
-}
-Airplane::Airplane(int id,int cap,bool isInter,string stat){
-    airplaneID = id;
-    capacity = cap;
-    isInternational = isInter;
-    status = stat;
-}
-Airplane::Airplane(const Airplane &other){
-    airplaneID = other.airplaneID;
-    capacity = other.capacity;
-    isInternational = other.isInternational;
-    status = other.status;
-}
-int Airplane::getAirplaneID() const{
-    return airplaneID;
-}
-void Airplane::setAirplaneID(int id){
-    airplaneID = id;
-}
-int Airplane::getCapacity() const{
-    return capacity;
-}
-void Airplane::setCapacity(int cap){
-    capacity = cap;
-}
-bool Airplane::getIsInternational() const{
-    return isInternational;
-}
-void Airplane::setIsInternational(bool isInter){
-    isInternational = isInter;
-}
-string Airplane::getStatus() const{
-    return status;
-}
-void Airplane::setStatus(string stat){
-    status = stat;
-}
 // City class
 class City{
-    private:
-        string name;
-        char direction; // north / south
-        int numofAirplanes;
-        Airplane* airplanes;
+private:
+    string cityName;
+    char NorthSouth; // 'n' or 's'
+    Airplane *airplane; // 10 airplanes max
+    int numberOfAirplanes;
 
-    public:
-        // Constructors
-        City();
-        City(string nm,char dir,int num,Airplane* airps);
-        City(const City &other);
-
-        // Getters and setters
-        string getName() const;
-        void setName(string nm);
-        char getDirection() const;
-        void setDirection(char dir);
-        int getNumofAirplanes() const;
-        void setNumofAirplanes(int num);
-        Airplane* getAirplanes(int i) const; // make i airplane thing
-        void setAirplanes(int i,Airplane airps);
 };
-City::City(){
-    name = "";
-    direction = '\0';
-    numofAirplanes = 0;
-    airplanes = nullptr;
-}
-City::City(string nm,char dir,int num,Airplane* airps){
-    name = nm;
-    direction = dir;
-    numofAirplanes = num;
-    airplanes = new Airplane[num]; // check if you can assign like this
-}
-City::City(const City &other){
-    name = other.name;
-    direction = other.direction;
-    numofAirplanes = other.numofAirplanes;
-    airplanes = other.airplanes;
-}
- // Getters and setters
-string City::getName() const{
-    return name;
-}
-void City::setName(string nm){
-    name = nm;
-}
-char City::getDirection() const{
-    return direction;
-}
-void City::setDirection(char dir){
-    direction = dir;
-}
-int City::getNumofAirplanes() const{
-    return numofAirplanes;
-}
-void City::setNumofAirplanes(int num){
-    numofAirplanes = num;
-}
-// set and get airplane
-
 // Country class
 class Country{
-    private:
-        string name;
-        int numofAirplanes;
-        Airplane* airplanes;
-
-    public:
-        // Constructors
-        Country();
-        Country(string nm,int num,Airplane* airps);
-        Country(const Country &other);
-
-        // Getters and setters
-        string getName() const;
-        void setName(string nm);
-        int getNumofAirplanes() const;
-        void setNumofAirplanes(int num);
-        Airplane* getAirplanes() const;
-        void setAirplanes(Airplane* airps);
 };
+class Booking{
+};
+
+// Flight class definition
+class Flight{
+    FlightSchedule *flightSchedule;
+    Airplane *airplane;
+    Booking *booking;
+};
+// FlightSchedule class definition
+class FlightSchedule{
+};
+// Booking class definition
+
+
+
 
 // Login class
 class Login{
@@ -198,7 +84,6 @@ string Login::getPassword() const{
 void Login::setPassword(string pw){
     password = pw;
 }
-
 
 // AdminAccount class
 class AdminAccount : public Login{
@@ -529,55 +414,8 @@ ostream& operator<<(ostream& os,const Passenger& p){
     os<<"Login Password: "<<pwd<<endl;
     return os;
 }
-// Flight class definition
-class Flight{
-private:
-    string departureLocation;
-    string destination;
-    int durationHours;
-    double distanceCovered;
-    bool isInternational;
-public:
-    // constructors
-    Flight();
-    Flight(string departureLocation,string destination,int durationHours,double distanceCovered,bool isInternational);
-    Flight(const Flight& other);
 
-    // getters and setters
-    string getDepartureLocation();
-    void setDepartureLocation(string departureLocation);
-
-    string getDestination();
-    void setDestination(string destination);
-
-    int getDurationHours();
-    void setDurationHours(int durationHours);
-
-    double getDistanceCovered();
-    void setDistanceCovered(double distanceCovered);
-
-    bool getIsInternational();
-    void setIsInternational(bool isInternational);
-};
-
-// FlightSchedule class definition
-class FlightSchedule{
-private:
-    Flight *flights;
-public:
-   
-};
-
-// Booking class definition
-class Booking{
-private:
-  
-public:
-    // constructors
-    Booking();
-    Booking(const Booking& other);
-
-};
+// END OF CLASS DEFINITIONS
 bool verifyFinancialDetails(PaymentDetails* pd){
 // verify financial details
     if(pd->getCardNumber().length()!=16 || pd->getCvv().length()!=3 || pd->getExpiryDate().length()!=5){
@@ -867,6 +705,6 @@ void mainMenu(){
     }
 }
 int main(){
- mainMenu();
+    mainMenu();
     return 0;
 }
