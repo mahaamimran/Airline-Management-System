@@ -232,8 +232,7 @@ void Admin::setIsAdmin(bool isa) {
 
 
 // PassengerAccount class definition
-class PassengerAccount : public Login {
-private:
+class PassengerAccount : public Login{
 public:
     // constructors
     PassengerAccount();
@@ -242,14 +241,54 @@ public:
 
     // member functions
     void displayAccountDetails(); // '***' instead of pwd
-    void resetPassword();
-    void resetUsername();
+    void resetPassword(string name);
+    void resetUsername(string name);
     // overloading operators
     bool operator==(const PassengerAccount &other);
     friend ostream& operator<<(ostream &out, const PassengerAccount &pa);
-
-    
 };
+void storePassengerDetailsinFile(PassengerAccount passengerAccount, string name){
+    // WOHHOOO IT WORKED
+    // open the input file for reading
+    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
+    ifstream fin(logintxt);
+    if (!fin) {
+        cout << "Error opening input file: " << logintxt << endl;
+        return;
+    }
+    // open a temporary output file for writing
+    string tempFile = "/Users/mahamimran/PassengerLogin_temp.txt";
+    ofstream fout(tempFile);
+    if (!fout) {
+        cout << "Error opening temporary output file: " << tempFile << endl;
+        fin.close();
+        return;
+    }
+    // loop through each line in the input file
+    bool found = false;
+    string line;
+    while (getline(fin, line)) {
+        // check if the line matches the passenger's name
+        if (line.substr(0, name.length()) == name) {
+            fout << name << "%" << passengerAccount.getUsername() << "%" << passengerAccount.getPassword() << endl;
+            found = true;
+        }
+        else fout << line << endl;
+        
+    }
+    // if no matching line was found, add a new line for the passenger at the end of the file
+    if (!found) {
+        fout << name << "%" << passengerAccount.getUsername() << "%" << passengerAccount.getPassword() << endl;
+    }
+    // close the input and output files
+    fin.close();
+    fout.close();
+
+    // delete the original input file and rename the temporary output file to the original filename
+    remove(logintxt.c_str());
+    rename(tempFile.c_str(), logintxt.c_str());
+}
+
 PassengerAccount::PassengerAccount():Login("","") {}
 PassengerAccount::PassengerAccount(string un, string pwd):Login(un,pwd) {}
 PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other) {}
@@ -260,34 +299,26 @@ void PassengerAccount::displayAccountDetails() {
     cout<<"password: "<<pwd<<endl;
     // display username and password
 }
-void PassengerAccount::resetPassword() {
+void PassengerAccount::resetPassword(string name) {
     string pwd;
-    cout<<"Enter new password: ";
+    cout<<"Enter new Password: ";
     cin>>pwd;
     password = pwd;
+    // update username in file
+    PassengerAccount pa(username,password);
+    storePassengerDetailsinFile(pa,name);
 }
-void PassengerAccount::resetUsername() {
+void PassengerAccount::resetUsername(string name) {
     string un;
     cout<<"Enter new username: ";
     cin>>un;
     username = un;
-    fstream f;
-    string line;
-    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
-    // length of username
-    int len = username.length();
-    f.open(logintxt,ios::in);
-    if(f.is_open()){
-             while(!f.eof()){     
-                 getline(f,line);
-                 cout<<line<<endl;
-            }   
-   }
-        else cout<<"file not open"<<endl;
-    f.close();
-
+    // update username in file
+    PassengerAccount pa(username,password);
+    storePassengerDetailsinFile(pa,name);
 
 }
+
 bool PassengerAccount::operator==(const PassengerAccount &other) {
     if(username==other.username && password==other.password) return true;
     return false;
@@ -484,6 +515,7 @@ public:
     string getExpiryDate();
     void setExpiryDate(string expiryDate);
 };
+
 void passengerLogin(){
    // creates an object of passenger and stores the details there
     cout<<"Enter your name: ";
@@ -528,15 +560,9 @@ void passengerLogin(){
     // operator overloading used
     cout<<passenger;
     // storing in a file
-    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
-    ofstream fout;
-    fout.open(logintxt);
-    if(fout.is_open()){
-        fout<<name<<"%"<<passenger.getLogin()->getUsername()<<"%"<<passenger.getLogin()->getPassword()<<endl;
-        // one line per passenger
-    }
-    else cout<<"File not created\n";
-    fout.close();
+    storePassengerDetailsinFile(passengerAccount,name);
+    passengerAccount.resetUsername(name);
+    passengerAccount.resetPassword(name);
     
 }
 
@@ -597,12 +623,7 @@ void mainMenu(){
 
 }
 int main(){
-    PassengerAccount p("maham","12345678");
-    Passenger p1("maham","12345678",123456789,true,&p);
-    p.resetUsername();
-
-
-//    passengerLogin();
+ passengerLogin();
     return 0;
 }
 /*
