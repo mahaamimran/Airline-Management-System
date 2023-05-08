@@ -104,16 +104,16 @@ public:
     AdminAccount(const AdminAccount &other);
 
     // member functions
-    void displayAccountDetails(); // '***' instead of pwd
+    void displayLoginDetails(); // '***' instead of pwd
     void changeFlightSchedule();
     void addNewRoute();
-    void restrictNumberofPassengers();
+    void restrictNumberOfPassengers();
     void updateInquiryDetails();
 };
 AdminAccount::AdminAccount():Login("",""){}
 AdminAccount::AdminAccount(string un,string pw):Login(un,pw){}
 AdminAccount::AdminAccount(const AdminAccount &other):Login(other){}
-void AdminAccount::displayAccountDetails(){
+void AdminAccount::displayLoginDetails(){
     cout<<"Username: "<<username<<endl;
     cout<<"Password: ";
     for (int i=0;i<password.length();i++){
@@ -127,7 +127,7 @@ void AdminAccount::changeFlightSchedule(){
 void AdminAccount::addNewRoute(){
     // add new route
 }
-void AdminAccount::restrictNumberofPassengers(){
+void AdminAccount::restrictNumberOfPassengers(){
     // restrict number of passengers
 }
 void AdminAccount::updateInquiryDetails(){
