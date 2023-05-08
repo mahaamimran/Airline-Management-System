@@ -1,9 +1,27 @@
 // Maham 22i-2733 SE-F
-
 #include <iostream>
 #include <fstream>
 #include <string>
 using namespace std;
+class Airplane;
+class City;
+class Country;
+class Booking;
+class Flight;
+class FlightSchedule;
+class Login;
+class AdminAccount;
+class PassengerAccount;
+class Passenger;
+class PaymentDetails;
+
+void storePassengerDetailsinFile(Passenger &passenger,string name);
+bool verifyFinancialDetails(PaymentDetails* pd);
+void passengerRegistration();
+void passengerLogin();
+void adminLogin();
+void mainMenu();
+
 // Airplane class
 class Airplane{ 
 private:
@@ -159,54 +177,14 @@ public:
 
     // member functions
     void displayAccountDetails(); // '***' instead of pwd
-    void resetPassword(string name);
-    void resetUsername(string name);
+    void resetPassword(Passenger passenger,string name);
+    void resetUsername(Passenger passenger, string name);
     // overloading operators
     bool operator==(const PassengerAccount &other);
     friend ostream& operator<<(ostream &out,const PassengerAccount &pa);
 };
 
-void storePassengerLoginDetailsinFile(PassengerAccount passengerAccount,string name){
-    // WOHHOOO IT WORKED
-    // open the input file for reading
-    string logintxt = "/Users/mahamimran/PassengerLogin.txt";
-    ifstream fin(logintxt);
-    if (!fin){
-        cout<<"Error opening input file: "<<logintxt<<endl;
-        return;
-    }
-    // open a temporary output file for writing
-    string tempFile = "/Users/mahamimran/PassengerLogin_temp.txt";
-    ofstream fout(tempFile);
-    if (!fout){
-        cout<<"Error opening temporary output file: "<<tempFile<<endl;
-        fin.close();
-        return;
-    }
-    // loop through each line in the input file
-    bool found = false;
-    string line;
-    while (getline(fin,line)){
-        // check if the line matches the passenger's name
-        if (line.substr(0,name.length()) == name){
-            fout<<name<<"%"<<passengerAccount.getUsername()<<"%"<<passengerAccount.getPassword()<<endl;
-            found = true;
-        }
-        else fout<<line<<endl;
-        
-    }
-    // if no matching line was found,add a new line for the passenger at the end of the file
-    if (!found){
-        fout<<name<<"%"<<passengerAccount.getUsername()<<"%"<<passengerAccount.getPassword()<<endl;
-    }
-    // close the input and output files
-    fin.close();
-    fout.close();
 
-    // delete the original input file and rename the temporary output file to the original filename
-    remove(logintxt.c_str());
-    rename(tempFile.c_str(),logintxt.c_str());
-}
 
 PassengerAccount::PassengerAccount():Login("",""){}
 PassengerAccount::PassengerAccount(string un,string pwd):Login(un,pwd){}
@@ -218,42 +196,7 @@ void PassengerAccount::displayAccountDetails(){
     cout<<"password: "<<pwd<<endl;
     // display username and password
 }
-void PassengerAccount::resetPassword(string name){
-    cout<<"Enter new password: ";
-    string pwd;
-    cin >> pwd;
-    cout<<"Confirm your password: ";
-    string confirmPassword;
-    cin >> confirmPassword;
-    while(pwd != confirmPassword
-          || pwd.length() < 8
-          || pwd.length() > 16
-          || pwd.find_first_of("0123456789") == string::npos
-          || pwd.find_first_of("!@#$%^&*()_+") == string::npos
-          || pwd.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
-          || pwd.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
-        cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
-        cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
-        cout<<"Enter your password: ";
-        cin >> pwd;
-        cout<<"Confirm your password: ";
-        cin >> confirmPassword;
-    }
-    password = pwd;
-     // update username in file
-    PassengerAccount pa(username,password);
-    storePassengerLoginDetailsinFile(pa,name);
-}
-void PassengerAccount::resetUsername(string name){
-    string un;
-    cout<<"Enter new username: ";
-    cin>>un;
-    username = un;
-    // update username in file
-    PassengerAccount pa(username,password);
-    storePassengerLoginDetailsinFile(pa,name);
 
-}
 
 bool PassengerAccount::operator==(const PassengerAccount &other){
     if(username==other.username && password==other.password) return true;
@@ -433,6 +376,42 @@ void Passenger::viewTravellingCost(){
 void Passenger::updateDetails(){
     // update details
 }
+
+
+// werid placement ik
+void PassengerAccount::resetPassword(Passenger passenger,string name){
+    cout<<"Enter new password: ";
+    string pwd;
+    cin >> pwd;
+    cout<<"Confirm your password: ";
+    string confirmPassword;
+    cin >> confirmPassword;
+    while(pwd != confirmPassword
+          || pwd.length() < 8
+          || pwd.length() > 16
+          || pwd.find_first_of("0123456789") == string::npos
+          || pwd.find_first_of("!@#$%^&*()_+") == string::npos
+          || pwd.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
+          || pwd.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
+        cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
+        cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
+        cout<<"Enter your password: ";
+        cin >> pwd;
+        cout<<"Confirm your password: ";
+        cin >> confirmPassword;
+    }
+    password = pwd;
+     // update username in file
+    storePassengerDetailsinFile(passenger, name);
+}
+void PassengerAccount::resetUsername(Passenger passenger,string name){
+    string un;
+    cout<<"Enter new username: ";
+    cin>>un;
+    username = un;
+    // update username in file
+    storePassengerDetailsinFile(passenger, name);
+}
 ostream& operator<<(ostream& os,const Passenger& p){
     os<<"Name: "<<p.name<<endl;
     os<<"Passport Number: "<<p.passportNumber<<endl;
@@ -447,16 +426,48 @@ ostream& operator<<(ostream& os,const Passenger& p){
 }
 
 // END OF CLASS DEFINITIONS
-void storePassengerDetailsinFile(Passenger passenger){
-     string logintxt = "/Users/mahamimran/PassengerDetails.txt";
-    ofstream fout(logintxt,ios::app);
-    if (!fout){
-        cout<<"Error opening output file: "<<logintxt<<endl;
+void storePassengerDetailsinFile(Passenger &passenger,string name){
+    // WOHHOOO IT WORKED
+    // open the input file for reading
+    string logintxt = "/Users/mahamimran/PassengerDetails.txt";
+    ifstream fin(logintxt);
+    if (!fin){
+        cout<<"Error opening input file: "<<logintxt<<endl;
         return;
-    }//login->getUsername()
-    fout << passenger.getName() << "%" << passenger.getPassportNumber() << "%" << passenger.getCnic() << "%" << passenger.getVisaStatus() << "%" << passenger.getLogin()->getUsername() << "%" << passenger.getLogin()->getPassword() << "%" << passenger.getPaymentDetails()->getCardNumber() << "%" << passenger.getPaymentDetails()->getExpiryDate() << "%" << passenger.getPaymentDetails()->getCvv() << endl;
+    }
+    // open a temporary output file for writing
+    string tempFile = "/Users/mahamimran/PassengerDetails_temp.txt";
+    ofstream fout(tempFile);
+    if (!fout){
+        cout<<"Error opening temporary output file: "<<tempFile<<endl;
+        fin.close();
+        return;
+    }
+    // loop through each line in the input file
+    bool found = false;
+    string line;
+    while (getline(fin,line)){
+        // check if the line matches the passenger's name
+        if (line.substr(0,name.length()) == name){
+            fout << passenger.getName() << "%" << passenger.getPassportNumber() << "%" << passenger.getCnic() << "%" << passenger.getVisaStatus() << "%" << passenger.getLogin()->getUsername() << "%" << passenger.getLogin()->getPassword() << "%" << passenger.getPaymentDetails()->getCardNumber() << "%" << passenger.getPaymentDetails()->getExpiryDate() << "%" << passenger.getPaymentDetails()->getCvv() << endl;
+            found = true;
+        }
+        else fout<<line<<endl;
+        
+    }
+    // if no matching line was found,add a new line for the passenger at the end of the file
+    if (!found){
+        fout << passenger.getName() << "%" << passenger.getPassportNumber() << "%" << passenger.getCnic() << "%" << passenger.getVisaStatus() << "%" << passenger.getLogin()->getUsername() << "%" << passenger.getLogin()->getPassword() << "%" << passenger.getPaymentDetails()->getCardNumber() << "%" << passenger.getPaymentDetails()->getExpiryDate() << "%" << passenger.getPaymentDetails()->getCvv() << endl;
+    }
+    // close the input and output files
+    fin.close();
     fout.close();
+
+    // delete the original input file and rename the temporary output file to the original filename
+    remove(logintxt.c_str());
+    rename(tempFile.c_str(),logintxt.c_str());
 }
+
 bool verifyFinancialDetails(PaymentDetails* pd){
 // verify financial details
     if(pd->getCardNumber().length()!=16 || pd->getCvv().length()!=3 || pd->getExpiryDate().length()!=5){
@@ -546,76 +557,113 @@ void passengerRegistration(){
     cout<<passenger;
 
     // storing in a file
-    storePassengerLoginDetailsinFile(passengerAccount,name);
-    storePassengerDetailsinFile(passenger);
+    storePassengerDetailsinFile(passenger,name);
     // menu should inlude booking flights etc
     // resetting password option should also be available
 }
 void passengerLogin(){
-    cout<<"Enter your username: ";
-    string username;
-    cin >> username;
-    cout<<"Enter your password: ";
-    string password;
-    cin >> password;
-    // check if username and password match
-    // read file
-    fstream fin;
-    fin.open("/Users/mahamimran/PassengerLogin.txt",ios::in);
-    string line;
     bool found = false;
+    string password;
+    string username;
     string name = "";
-    while(fin){
-        getline(fin,line);
-        if(line.find("%" + username + "%" + password) != string::npos){
-            found = true;
-            cout<<"login succesful"<<endl;
-            size_t pos = line.find('%');
-            name = line.substr(0, pos);
-            cout<<"Welcome "<<name<<"!"<<endl;
-            break;
+    do{
+        cout<<"Enter your username: ";
+      
+        cin >> username;
+        cout<<"Enter your password: ";
+       
+        cin >> password;
+        // check if username and password match
+        // read file
+        fstream fin;
+        fin.open("/Users/mahamimran/PassengerDetails.txt",ios::in);
+        string line;
+       
+        while(!fin.eof()){
+            getline(fin,line);
+            if(line.find("%" + username + "%" + password + "%") != string::npos){
+                found = true;
+                cout<<"login succesful"<<endl;
+                size_t pos = line.find('%');
+                name = line.substr(0, pos);
+                cout<<"Welcome "<<name<<"!"<<endl;
+                break;
+            }
         }
+        if(!found)cout<<"Invalid username or password. Please try again."<<endl;
+        fin.close();
+    }while(!found);
+    
+    fstream fin;
+    // opens file to read passenger details
+    fin.open("/Users/mahamimran/PassengerDetails.txt",ios::in);
+    
+       string name2, passportNumber, cnic, visaStatus2, username2, password2, cardNumber, expiryDate, cvv;
+ while (fin) {
+     // populating passenger
+    getline(fin, name2, '%');
+    getline(fin, passportNumber, '%');
+    getline(fin, cnic, '%');
+    getline(fin, visaStatus2, '%');
+    getline(fin, username2, '%');
+    getline(fin, password2, '%');
+    getline(fin, cardNumber, '%');
+    getline(fin, expiryDate, '%');
+    getline(fin, cvv);
+     // converting to bool
+   
+     // just checkinh awein
+    if (name == name2) {
+       
+        break;
     }
-    if(!found)cout<<"Invalid username or password. Please try again."<<endl;
-    fin.close();
-    // object for passenger created 
-    PassengerAccount passengerAccount(username,password);
+}
+    bool visaStatus = (visaStatus2 == "1");
+    PaymentDetails paymentDetails(cardNumber, expiryDate, cvv);
+    PassengerAccount passengerAccount(username2, password2);
+    Passenger passenger(name2, passportNumber, stoi(cnic), visaStatus, &passengerAccount, &paymentDetails);
+    cout << "Your details are as follows:\n";
+    cout << passenger;
+
     if(found){
-        // display menu
-        // menu should inlude booking flights etc
-        // resetting password option should also be available
-        cout<<"What action would you like to perform?\n";
-        cout<<"1. Book a flight\n";
-        cout<<"2. Reset username\n";
-        cout<<"3. Reset password\n";
-        cout<<"4. Display account details\n";
-        cout<<"5. Exit\n";
         int choice;
-        cin>>choice;
-        switch(choice){
-            case 1:
-                // book a flight
-                break;
-            case 2:
-                // reset username
-                passengerAccount.resetUsername(name);
-                break;
-            case 3:
-                // reset password
-                passengerAccount.resetPassword(name);
-                break;
-            case 4:
-                // display account details
-                passengerAccount.displayAccountDetails();
-                break;
-            case 5:
-                // exit
-                cout<<"exiting..."<<endl;
-                break;
-            default:
-                cout<<"Invalid choice entered. Please try again.\n";
-                break;
-        }
+        do{
+            // display menu
+            // menu should inlude booking flights etc
+            // resetting password option should also be available
+            cout<<"What action would you like to perform?\n";
+            cout<<"1. Book a flight\n";
+            cout<<"2. Reset username\n";
+            cout<<"3. Reset password\n";
+            cout<<"4. Display account details\n";
+            cout<<"5. Exit\n";
+            
+            cin>>choice;
+            switch(choice){
+                case 1:
+                    // book a flight
+                    break;
+                case 2:
+                    // reset username
+                    passengerAccount.resetUsername(passenger,name);
+                    break;
+                case 3:
+                    // reset password
+                    passengerAccount.resetPassword(passenger,name);
+                    break;
+                case 4:
+                    // display account details
+                    passengerAccount.displayAccountDetails();
+                    break;
+                case 5:
+                    // exit
+                    cout<<"exiting..."<<endl;
+                    break;
+                default:
+                    cout<<"Invalid choice entered. Please try again.\n";
+                    break;
+            }
+        }while(choice!=5);
     }
     else{
         passengerLogin();
