@@ -25,19 +25,29 @@ private:
 // Country class
 class Country{
 };
+// Booking class 
 class Booking{
 };
-
-// Flight class definition
+// Flight class 
 class Flight{
-    FlightSchedule *flightSchedule;
+   // FlightSchedule *flightSchedule;
     Airplane *airplane;
     Booking *booking;
 };
-// FlightSchedule class definition
+// FlightSchedule class 
 class FlightSchedule{
+    Country *country; // country travelling to
+    Airplane *airplane;
+    string departureTime;
+    string arrivalTime;
+    string departureDate;
+    string arrivalDate;
+    string departureCity;
+    string arrivalCity;
+    double ticketPrice; // calculated in a memeber function called calculateTicketPrice()
+    // change/cancel 25% deduction 
+
 };
-// Booking class definition
 
 
 
