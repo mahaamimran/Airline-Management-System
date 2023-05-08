@@ -20,6 +20,21 @@ private:
     char NorthSouth; // 'n' or 's'
     Airplane *airplane; // 10 airplanes max
     int numberOfAirplanes;
+public:
+    // constructors
+    City();
+    City(string name,char NS,Airplane *a,int num);
+    City(const City &other);
+
+    // getters and setters
+    string getCityName() const;
+    void setCityName(string name);
+    char getNorthSouth() const;
+    void setNorthSouth(char NS);
+    Airplane* getAirplane(int index) const;
+    void setAirplane(Airplane *a,int index);
+    int getNumberOfAirplanes() const;
+    void setNumberOfAirplanes(int num);
 
 };
 // Country class
@@ -150,7 +165,8 @@ public:
     bool operator==(const PassengerAccount &other);
     friend ostream& operator<<(ostream &out,const PassengerAccount &pa);
 };
-void storePassengerDetailsinFile(PassengerAccount passengerAccount,string name){
+
+void storePassengerLoginDetailsinFile(PassengerAccount passengerAccount,string name){
     // WOHHOOO IT WORKED
     // open the input file for reading
     string logintxt = "/Users/mahamimran/PassengerLogin.txt";
@@ -226,7 +242,7 @@ void PassengerAccount::resetPassword(string name){
     password = pwd;
      // update username in file
     PassengerAccount pa(username,password);
-    storePassengerDetailsinFile(pa,name);
+    storePassengerLoginDetailsinFile(pa,name);
 }
 void PassengerAccount::resetUsername(string name){
     string un;
@@ -235,7 +251,7 @@ void PassengerAccount::resetUsername(string name){
     username = un;
     // update username in file
     PassengerAccount pa(username,password);
-    storePassengerDetailsinFile(pa,name);
+    storePassengerLoginDetailsinFile(pa,name);
 
 }
 
@@ -322,14 +338,19 @@ public:
     // getters + setters
     string getName() const;
     void setName(string nm);
+
     string getPassportNumber() const;
     void setPassportNumber(string pn);
+
     int getCnic() const;
     void setCnic(int cn);
+
     bool getVisaStatus() const;
     void setVisaStatus(bool vs);
+
     PassengerAccount* getLogin() const;
     void setLogin(PassengerAccount* lg);
+
     PaymentDetails* getPaymentDetails() const;
     void setPaymentDetails(PaymentDetails* pd);
 
@@ -426,6 +447,16 @@ ostream& operator<<(ostream& os,const Passenger& p){
 }
 
 // END OF CLASS DEFINITIONS
+void storePassengerDetailsinFile(Passenger passenger){
+     string logintxt = "/Users/mahamimran/PassengerDetails.txt";
+    ofstream fout(logintxt,ios::app);
+    if (!fout){
+        cout<<"Error opening output file: "<<logintxt<<endl;
+        return;
+    }//login->getUsername()
+    fout << passenger.getName() << "%" << passenger.getPassportNumber() << "%" << passenger.getCnic() << "%" << passenger.getVisaStatus() << "%" << passenger.getLogin()->getUsername() << "%" << passenger.getLogin()->getPassword() << "%" << passenger.getPaymentDetails()->getCardNumber() << "%" << passenger.getPaymentDetails()->getExpiryDate() << "%" << passenger.getPaymentDetails()->getCvv() << endl;
+    fout.close();
+}
 bool verifyFinancialDetails(PaymentDetails* pd){
 // verify financial details
     if(pd->getCardNumber().length()!=16 || pd->getCvv().length()!=3 || pd->getExpiryDate().length()!=5){
@@ -513,8 +544,10 @@ void passengerRegistration(){
     cout<<"Your details are as follows:\n";
     // operator overloading used
     cout<<passenger;
+
     // storing in a file
-    storePassengerDetailsinFile(passengerAccount,name);
+    storePassengerLoginDetailsinFile(passengerAccount,name);
+    storePassengerDetailsinFile(passenger);
     // menu should inlude booking flights etc
     // resetting password option should also be available
 }
