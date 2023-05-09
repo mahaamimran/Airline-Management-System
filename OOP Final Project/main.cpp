@@ -26,17 +26,85 @@ void mainMenu();
 class Airplane{ 
 private:
     int airplaneID;
-    int capacity;
-    bool isInternational;
+    int capacityEconomy;
+    int capacityBusiness;
     string status; // in air / landed
     int numofPassengers; //  total 60, 30 can sit (capacity/2)
-};
+public:
+    // constructors
+    Airplane();
+    Airplane(int id,int capE,int capB,string stat,int num);
+    Airplane(const Airplane &other);
 
+    // getters and setters
+    int getAirplaneID() const;
+    void setAirplaneID(int id);
+    int getCapacityEconomy() const;
+    void setCapacityEconomy(int capE);
+    int getCapacityBusiness() const;
+    void setCapacityBusiness(int capB);
+    string getStatus() const;
+    void setStatus(string stat);
+    int getNumofPassengers() const;
+    void setNumofPassengers(int num);
+};
+Airplane::Airplane(){
+    airplaneID = 0;
+    capacityEconomy = 0;
+    capacityBusiness = 0;
+    status = "";
+    numofPassengers = 0;
+}
+Airplane::Airplane(int id,int capE,int capB,string stat,int num){
+    airplaneID = id;
+    capacityEconomy = capE;
+    capacityBusiness = capB;
+    status = stat;
+    numofPassengers = num;
+}
+Airplane::Airplane(const Airplane &other){
+    airplaneID = other.airplaneID;
+    capacityEconomy = other.capacityEconomy;
+    capacityBusiness = other.capacityBusiness;
+    status = other.status;
+    numofPassengers = other.numofPassengers;
+}
+int Airplane::getAirplaneID() const{
+    return airplaneID;
+}
+void Airplane::setAirplaneID(int id){
+    airplaneID = id;
+}
+int Airplane::getCapacityEconomy() const{
+    return capacityEconomy;
+}
+void Airplane::setCapacityEconomy(int capE){
+    capacityEconomy = capE;
+}
+int Airplane::getCapacityBusiness() const{
+    return capacityBusiness;
+}
+void Airplane::setCapacityBusiness(int capB){
+    capacityBusiness = capB;
+}
+string Airplane::getStatus() const{
+    return status;
+}
+void Airplane::setStatus(string stat){
+    status = stat;
+}
+int Airplane::getNumofPassengers() const{
+    return numofPassengers;
+}
+void Airplane::setNumofPassengers(int num){
+    numofPassengers = num;
+}
 // City class
 class City{
 private:
     string cityName;
     char NorthSouth; // 'n' or 's'
+    int distance; 
     Airplane *airplane; // 10 airplanes max
     int numberOfAirplanes;
 public:
@@ -54,26 +122,59 @@ public:
     void setAirplane(Airplane *a,int index);
     int getNumberOfAirplanes() const;
     void setNumberOfAirplanes(int num);
-
+    
 };
 // Country class
 class Country{
     string name;
+    int distance;
+public:
+    // constructors
+    Country();
+    Country(string name,int dist);
+    Country(const Country &other);
+
+    // getters and setters
+    string getName() const;
+    void setName(string name);
+    int getDistance() const;
+    void setDistance(int dist);
 };
+Country::Country(){
+    name = "";
+    distance = 0;
+}
+Country::Country(string name,int dist){
+    this->name = name;
+    distance = dist;
+}
+Country::Country(const Country &other){
+    name = other.name;
+    distance = other.distance;
+}
+string Country::getName() const{
+    return name;
+}
+void Country::setName(string name){
+    this->name = name;
+}
+int Country::getDistance() const{
+    return distance;
+}
+void Country::setDistance(int dist){
+    distance = dist;
+}
 
 // Flight class 
 class Booking{
-    Airplane *airplane;
-    Passenger *passenger;
-    Country *country; // to country
-    City *city; // from city
+    Airplane *airplane; // 1
+    Passenger *passenger; // 1 or more 
+    Country *country; // 1 to country
+    City *city; // 1 from city
     FlightSchedule *flightSchedule; // route details
     bool isLocal;
     // if flight is local only populate two city stuff idk omg
-    
-    
     // display cost by overloading << operator
-    
 public:
     // constructors 
     // getters + setters
@@ -91,12 +192,90 @@ class FlightSchedule{
     string arrivalTime;
     string departureDate;
     string arrivalDate;
-    string departurePlace;
-    string arrivalPlace;
     double ticketPrice; // calculated in a memeber function called calculateTicketPrice()
     // change/cancel 25% deduction 
+public:
+    // constructors
+    FlightSchedule();
+    FlightSchedule(string depTime,string arrTime,string depDate,string arrDate,double price);
+    FlightSchedule(const FlightSchedule &other);
 
+    // getters + setters
+    setDepartureTime(string depTime);
+    string getDepartureTime() const;
+    setArrivalTime(string arrTime);
+    string getArrivalTime() const;
+    setDepartureDate(string depDate);
+    string getDepartureDate() const;
+    setArrivalDate(string arrDate);
+    string getArrivalDate() const;
+    setTicketPrice(double price);
+    double getTicketPrice() const;
+
+    // methods
+    calculateTicketPrice();
+    changeFlightSchedule(); 
+    // change/cancel 25% deduction
 };
+FlightSchedule::FlightSchedule(){
+    departureTime = "";
+    arrivalTime = "";
+    departureDate = "";
+    arrivalDate = "";
+    ticketPrice = 0;
+}
+FlightSchedule::FlightSchedule(string depTime,string arrTime,string depDate,string arrDate,double price){
+    departureTime = depTime;
+    arrivalTime = arrTime;
+    departureDate = depDate;
+    arrivalDate = arrDate;
+    ticketPrice = price;
+}
+FlightSchedule::FlightSchedule(const FlightSchedule &other){
+    departureTime = other.departureTime;
+    arrivalTime = other.arrivalTime;
+    departureDate = other.departureDate;
+    arrivalDate = other.arrivalDate;
+    ticketPrice = other.ticketPrice;
+}
+FlightSchedule::setDepartureTime(string depTime){
+    departureTime = depTime;
+}
+string FlightSchedule::getDepartureTime() const{
+    return departureTime;
+}
+FlightSchedule::setArrivalTime(string arrTime){
+    arrivalTime = arrTime;
+}
+string FlightSchedule::getArrivalTime() const{
+    return arrivalTime;
+}
+FlightSchedule::setDepartureDate(string depDate){
+    departureDate = depDate;
+}
+string FlightSchedule::getDepartureDate() const{
+    return departureDate;
+}
+FlightSchedule::setArrivalDate(string arrDate){
+    arrivalDate = arrDate;
+}
+string FlightSchedule::getArrivalDate() const{
+    return arrivalDate;
+}
+FlightSchedule::setTicketPrice(double price){
+    ticketPrice = price;
+}
+double FlightSchedule::getTicketPrice() const{
+    return ticketPrice;
+}
+FlightSchedule::calculateTicketPrice(){
+    // calculate ticket price
+}
+FlightSchedule::changeFlightSchedule(){
+    // change flight schedule
+    // change/cancel 25% deduction
+}
+
 // Login class
 class Login{
     protected:
@@ -142,7 +321,6 @@ void Login::setPassword(string pw){
 
 // AdminAccount class
 class AdminAccount : public Login{
-    Booking *Booking;
 public:
    // Constructors
     AdminAccount();
@@ -169,8 +347,51 @@ void AdminAccount::displayLoginDetails(){
 }
 void AdminAccount::changeFlightSchedule(){
     // change flight schedule
-    // opens a file for flight schedule, stores all relevant details
-    // flight 
+    // booking object created, populated and stored in a file
+    int choice;
+    do{
+        cout<<"Would you like to add an international flight or a local flight?\n";
+        cout<<"1. International\n";
+        cout<<"2. Local\n";
+        cout<<"3. Exit\n";
+        cin>>choice;
+        switch(choice){
+            case 1:{
+                // add international flight
+
+                // asking admin to enter flight details
+
+                // storing flight object in a file
+                fstream fout;
+                fout.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::out|ios::app);
+                if(fout.is_open()){
+                    
+                }
+                else cout<<"File not found.\n";
+                fout.close();
+                break;
+            }
+            case 2:{
+                // add local flight
+                fstream fout;
+                fout.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::out|ios::app);
+                if(fout.is_open()){
+                    
+                }
+                else cout<<"File not found.\n";
+                fout.close();
+                break;
+            }
+            case 3:
+                cout<<"exiting...\n";
+                break;
+            default:
+                cout<<"Invalid choice. Please try again.\n";
+                break;
+        }
+        
+    }while(choice!=3);
+    
 }
 void AdminAccount::addNewRoute(){
     // add new route
@@ -406,7 +627,7 @@ void PassengerAccount::resetPassword(Passenger passenger,string name){
           || pwd.length() > 16
           || pwd.find_first_of("0123456789") == string::npos
           || pwd.find_first_of("!@#$%^&*()_+") == string::npos
-          || pwd.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
+          || pwd.find_first_of("A ") == string::npos
           || pwd.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
         cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
         cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
@@ -444,7 +665,7 @@ ostream& operator<<(ostream& os,const Passenger& p){
 void storePassengerDetailsinFile(Passenger &passenger,string name){
     // WOHHOOO IT WORKED
     // open the input file for reading
-    string logintxt = "/Users/mahamimran/PassengerDetails.txt";
+    string logintxt = "/Users/mahamimran/Files/PassengerDetails.txt";
     ifstream fin(logintxt);
     if (!fin){
         cout<<"Error opening input file: "<<logintxt<<endl;
@@ -591,7 +812,7 @@ void passengerLogin(){
         // check if username and password match
         // read file
         fstream fin;
-        fin.open("/Users/mahamimran/PassengerDetails.txt",ios::in);
+        fin.open("/Users/mahamimran/Files/PassengerDetails.txt",ios::in);
         string line;
        
         while(!fin.eof()){
@@ -599,7 +820,7 @@ void passengerLogin(){
             if(line.find("%" + username + "%" + password + "%") != string::npos){
                 found = true;
                 cout<<"login succesful"<<endl;
-                size_t pos = line.find('%');
+                int pos = int(line.find('%'));
                 name = line.substr(0, pos);
                 cout<<"Welcome "<<name<<"!"<<endl;
                 break;
@@ -611,7 +832,7 @@ void passengerLogin(){
     
     fstream fin;
     // opens file to read passenger details
-    fin.open("/Users/mahamimran/PassengerDetails.txt",ios::in);
+    fin.open("/Users/mahamimran/Files/PassengerDetails.txt",ios::in);
     
        string name2, passportNumber, cnic, visaStatus2, username2, password2, cardNumber, expiryDate, cvv;
  while (fin) {
@@ -628,8 +849,7 @@ void passengerLogin(){
      // converting to bool
    
      // just checkinh awein
-    if (name == name2) {
-       
+    if(name == name2){
         break;
     }
 }
@@ -699,7 +919,7 @@ void adminLogin(){
     // check if username and password match
     // read file
     fstream fin;
-    fin.open("/Users/mahamimran/AdminLogin.txt",ios::in);
+    fin.open("/Users/mahamimran/Files/AdminLogin.txt",ios::in);
     string line;
     bool found = false;
     string name = "";
@@ -708,7 +928,7 @@ void adminLogin(){
         if(line.find("%" + username + "%" + password) != string::npos){
             found = true;
             cout<<"login succesful"<<endl;
-            size_t pos = line.find('%');
+            int pos = int(line.find('%'));
             name = line.substr(0, pos);
             cout<<"Welcome "<<name<<"!"<<endl;
             break;
@@ -719,6 +939,8 @@ void adminLogin(){
     // object for admin created 
     AdminAccount adminAccount(username,password);
     if(found){
+        int choice;
+        do{
         cout<<"What action would you like to perform?\n";
         cout<<"1. Display login details\n";
         cout<<"2. Change Flight Schedule\n";
@@ -726,7 +948,6 @@ void adminLogin(){
         cout<<"4. Restrict number of passengers\n";
         cout<<"5. Update inquiry details\n";
         cout<<"6. Exit\n";
-        int choice;
         cin>>choice;
         switch(choice){
             case 1:
@@ -756,6 +977,7 @@ void adminLogin(){
             default:
                 cout<<"Invalid choice entered. Please try again.\n";
         }
+        }while(choice!=6);
     }
     else{
         adminLogin();
@@ -789,7 +1011,7 @@ void mainMenu(){
                     break;
                 case 3:
                     // exit
-                    cout<<"Exiting...\n";
+                    cout<<"exiting...\n";
                     break;
                 default:
                     cout<<"Invalid choice\n";
@@ -802,7 +1024,7 @@ void mainMenu(){
             break;
         case 3:
             // exit
-            cout<<"Exiting...\n";
+            cout<<"exiting...\n";
             break;
         default:
             cout<<"Invalid choice\n";
@@ -811,10 +1033,17 @@ void mainMenu(){
     }
 }
 void populateFlightSchedule(){
-    
+  //  Airplane airplane("542",50,10,"Landed",0);
+    // set airplane in booking
+   // FlightSchedule flightSchedule(/*example values*/);
+    // set flightschedule 
+   // if(flightSchedule.departureplace()) is not a city thrn set bool smth idk
+
+
+
 }
 int main(){
-    populateFlightSchedule();
+   // populateFlightSchedule();
     mainMenu();
     return 0;
 }
