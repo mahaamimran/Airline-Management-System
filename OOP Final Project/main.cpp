@@ -348,6 +348,10 @@ void AdminAccount::displayLoginDetails(){
 void AdminAccount::changeFlightSchedule(){
     // change flight schedule
     // booking object created, populated and stored in a file
+    string departureCity;
+    char nsth;
+    string arrivalCountry;
+    
     int choice;
     do{
         cout<<"Would you like to add an international flight or a local flight?\n";
@@ -368,7 +372,6 @@ void AdminAccount::changeFlightSchedule(){
                     cout<<"4. Peshawar\n";
                     cout<<"5. Karachi\n";
                     cin>>depCity;
-                    string departureCity;
                     switch(depCity){
                         case 1:
                             departureCity = "Islamabad";
@@ -390,6 +393,27 @@ void AdminAccount::changeFlightSchedule(){
                             break;
                     }
                 }while(depCity<1 || depCity>5);
+
+                int ns=0;
+                do{
+                    cout<<"Which Airport are you travelling from? (North/South)\n";
+                    cout<<"1. North\n";
+                    cout<<"2. South\n";
+                    cin>>ns;
+                    
+                    switch(ns){
+                        case 1:
+                            nsth = 'N';
+                            break;
+                        case 2:
+                            nsth = 'S';
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(ns<1 || ns >2);
+
                 cout<<"Which Country is the flight arriving at?\n";
                 // 25 countries
                 int arrCountry;
@@ -420,7 +444,7 @@ void AdminAccount::changeFlightSchedule(){
                     cout<<"24. Turkey\n";
                     cout<<"25. United Kingdom\n";
                     cin>>arrCountry;
-                    string arrivalCountry;
+                    
                     switch(arrCountry){
                         case 1:
                             arrivalCountry = "United States";
@@ -503,11 +527,24 @@ void AdminAccount::changeFlightSchedule(){
                     }
                 }while(arrCountry<1||arrCountry>25);
 
+                cout<<"Enter the departure date in the following format: dd/mm/yyyy\n";
+                string departureDate;
+                cin>>departureDate;
+                cout<<"Enter the departure time in the following format: hh:mm\n";
+                string departureTime;
+                cin>>departureTime;
+                cout<<"Enter the arrival date in the following format: dd/mm/yyyy\n";
+                string arrivalDate;
+                cin>>arrivalDate;
+                cout<<"Enter the arrival time in the following format: hh:mm\n";
+                string arrivalTime;
+                cin>>arrivalTime;
+
                 // storing flight object in a file
                 fstream fout;
                 fout.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::out|ios::app);
                 if(fout.is_open()){
-                    
+                    fout<<departureCity<<"%"<<nsth<<"%"<<arrivalCountry<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
                 }
                 else cout<<"File not found.\n";
                 fout.close();
@@ -515,10 +552,128 @@ void AdminAccount::changeFlightSchedule(){
             }
             case 2:{
                 // add local flight
+                int depCity;
+                string departureCity;
+                do{
+                    cout<<"Which city is the flight departing from?\n";
+                    cout<<"1. Islamabad\n";
+                    cout<<"2. Lahore\n";
+                    cout<<"3. Quetta\n";
+                    cout<<"4. Peshawar\n";
+                    cout<<"5. Karachi\n";
+                    cin>>depCity;
+                    switch(depCity){
+                        case 1:
+                            departureCity = "Islamabad";
+                            break;
+                        case 2:
+                            departureCity = "Lahore";
+                            break;
+                        case 3:
+                            departureCity = "Quetta";
+                            break;
+                        case 4:
+                            departureCity = "Peshawar";
+                            break;
+                        case 5:
+                            departureCity = "Karachi";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(depCity<1 || depCity>5);
+
+                int ns=0;
+                char nschar;
+                do{
+                    cout<<"Which Airport are you travelling from? (North/South)\n";
+                    cout<<"1. North\n";
+                    cout<<"2. South\n";
+                    cin>>ns;
+                    switch(ns){
+                        case 1:
+                            nschar = 'N';
+                            break;
+                        case 2:
+                            nschar = 'S';
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(ns<1 || ns >2);
+
+                int arrCity;
+                string arrivalCity;
+                do{
+                    cout<<"Which city is the flight arriving to\n";
+                    cout<<"1. Islamabad\n";
+                    cout<<"2. Lahore\n";
+                    cout<<"3. Quetta\n";
+                    cout<<"4. Peshawar\n";
+                    cout<<"5. Karachi\n";
+                    cin>>arrCity;
+                    switch(arrCity){
+                        case 1:
+                            arrivalCity = "Islamabad";
+                            break;
+                        case 2:
+                            arrivalCity = "Lahore";
+                            break;
+                        case 3:
+                            arrivalCity = "Quetta";
+                            break;
+                        case 4:
+                            arrivalCity = "Peshawar";
+                            break;
+                        case 5:
+                            arrivalCity = "Karachi";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(arrCity<1 || arrCity>5);
+
+                int nsto=0;
+                char nsthto;
+                do{
+                    cout<<"Which Airport are you travelling to? (North/South)\n";
+                    cout<<"1. North\n";
+                    cout<<"2. South\n";
+                    cin>>nsto;
+                    switch(nsto){
+                        case 1:
+                            nsthto = 'N';
+                            break;
+                        case 2:
+                            nsthto = 'S';
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(nsto<1 || nsto >2);
+
+
+                cout<<"Enter the departure date in the following format: dd/mm/yyyy\n";
+                string departureDate;
+                cin>>departureDate;
+                cout<<"Enter the departure time in the following format: hh:mm\n";
+                string departureTime;
+                cin>>departureTime;
+                cout<<"Enter the arrival date in the following format: dd/mm/yyyy\n";
+                string arrivalDate;
+                cin>>arrivalDate;
+                cout<<"Enter the arrival time in the following format: hh:mm\n";
+                string arrivalTime;
+                cin>>arrivalTime;
+                
                 fstream fout;
                 fout.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::out|ios::app);
                 if(fout.is_open()){
-                    
+                 fout<<departureCity<<"%"<<nschar<<"%"<<arrivalCity<<"%"<<nsthto<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
                 }
                 else cout<<"File not found.\n";
                 fout.close();
