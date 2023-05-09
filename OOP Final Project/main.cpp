@@ -419,9 +419,6 @@ public:
     bool operator==(const PassengerAccount &other);
     friend ostream& operator<<(ostream &out,const PassengerAccount &pa);
 };
-
-
-
 PassengerAccount::PassengerAccount():Login("",""){}
 PassengerAccount::PassengerAccount(string un,string pwd):Login(un,pwd){}
 PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other){}
@@ -987,63 +984,52 @@ void adminLogin(){
 void mainMenu(){
     int choice=0;
     while(choice!=3){
-    cout<<"Are you a passenger or an admin?\n";
-    cout<<"1. Passenger\n";
-    cout<<"2. Admin\n";
-    cout<<"3. Exit\n";
-    cin>>choice;
-    switch(choice){
-        case 1:
-            cout<<"Do you have an existing account?\n";
-            cout<<"1. Yes\n";
-            cout<<"2. No\n";
-            cout<<"3. Exit\n";
-            int choice2;
-            cin>>choice2;
-            switch(choice2){
-                case 1:
-                    // login
-                    passengerLogin();
-                    break;
-                case 2:
-                    // register
-                    passengerRegistration();
-                    break;
-                case 3:
-                    // exit
-                    cout<<"exiting...\n";
-                    break;
-                default:
-                    cout<<"Invalid choice\n";
-                    break;
-            }
-            break;
-        case 2:
-            // admin
-            adminLogin();
-            break;
-        case 3:
-            // exit
-            cout<<"exiting...\n";
-            break;
-        default:
-            cout<<"Invalid choice\n";
-            break;
+        cout<<"Are you a passenger or an admin?\n";
+        cout<<"1. Passenger\n";
+        cout<<"2. Admin\n";
+        cout<<"3. Exit\n";
+        cin>>choice;
+        switch(choice){
+            case 1:
+                cout<<"Do you have an existing account?\n";
+                cout<<"1. Yes\n";
+                cout<<"2. No\n";
+                cout<<"3. Exit\n";
+                int choice2;
+                cin>>choice2;
+                switch(choice2){
+                    case 1:
+                        // login
+                        passengerLogin();
+                        break;
+                    case 2:
+                        // register
+                        passengerRegistration();
+                        break;
+                    case 3:
+                        // exit
+                        cout<<"exiting...\n";
+                        break;
+                    default:
+                        cout<<"Invalid choice\n";
+                        break;
+                }
+                break;
+            case 2:
+                // admin
+                adminLogin();
+                break;
+            case 3:
+                // exit
+                cout<<"exiting...\n";
+                break;
+            default:
+                cout<<"Invalid choice\n";
+                break;
+        }
     }
-    }
-}
-void populateFlightSchedule(){
-  //  Airplane airplane("542",50,10,"Landed",0);
-    // set airplane in booking
-   // FlightSchedule flightSchedule(/*example values*/);
-    // set flightschedule 
-   // if(flightSchedule.departureplace()) is not a city thrn set bool smth idk
-
-
-
 }
 int main(){
-   // populateFlightSchedule();
     mainMenu();
     return 0;
 }
