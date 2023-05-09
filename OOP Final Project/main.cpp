@@ -25,54 +25,48 @@ void mainMenu();
 // Airplane class
 class Airplane{ 
 private:
-    int airplaneID;
+    string airplaneID;
     int capacityEconomy;
     int capacityBusiness;
-    string status; // in air / landed
     int numofPassengers; //  total 60, 30 can sit (capacity/2)
 public:
     // constructors
     Airplane();
-    Airplane(int id,int capE,int capB,string stat,int num);
+    Airplane(int id,int capE,int capB,int num);
     Airplane(const Airplane &other);
 
     // getters and setters
-    int getAirplaneID() const;
-    void setAirplaneID(int id);
+    string getAirplaneID() const;
+    void setAirplaneID(string id);
     int getCapacityEconomy() const;
     void setCapacityEconomy(int capE);
     int getCapacityBusiness() const;
     void setCapacityBusiness(int capB);
-    string getStatus() const;
-    void setStatus(string stat);
     int getNumofPassengers() const;
     void setNumofPassengers(int num);
 };
 Airplane::Airplane(){
-    airplaneID = 0;
+    airplaneID = "";
     capacityEconomy = 0;
     capacityBusiness = 0;
-    status = "";
     numofPassengers = 0;
 }
-Airplane::Airplane(int id,int capE,int capB,string stat,int num){
+Airplane::Airplane(int id,int capE,int capB,int num){
     airplaneID = id;
     capacityEconomy = capE;
     capacityBusiness = capB;
-    status = stat;
     numofPassengers = num;
 }
 Airplane::Airplane(const Airplane &other){
     airplaneID = other.airplaneID;
     capacityEconomy = other.capacityEconomy;
     capacityBusiness = other.capacityBusiness;
-    status = other.status;
     numofPassengers = other.numofPassengers;
 }
-int Airplane::getAirplaneID() const{
+string Airplane::getAirplaneID() const{
     return airplaneID;
 }
-void Airplane::setAirplaneID(int id){
+void Airplane::setAirplaneID(string id){
     airplaneID = id;
 }
 int Airplane::getCapacityEconomy() const{
@@ -87,12 +81,6 @@ int Airplane::getCapacityBusiness() const{
 void Airplane::setCapacityBusiness(int capB){
     capacityBusiness = capB;
 }
-string Airplane::getStatus() const{
-    return status;
-}
-void Airplane::setStatus(string stat){
-    status = stat;
-}
 int Airplane::getNumofPassengers() const{
     return numofPassengers;
 }
@@ -103,7 +91,7 @@ void Airplane::setNumofPassengers(int num){
 class City{
 private:
     string cityName;
-    char NorthSouth; // 'n' or 's'
+    char NorthSouth; // 'N' or 'S'
     int distance; 
     Airplane *airplane; // 10 airplanes max
     int numberOfAirplanes;
@@ -346,10 +334,530 @@ void AdminAccount::displayLoginDetails(){
     cout<<endl;
 }
 void AdminAccount::changeFlightSchedule(){
+    // change route of flight based on flightID?
+    int choice;
+    do{
+    cout<<"Would you like to change an international flight or a local flight?"<<endl;
+    cout<<"1. International"<<endl;
+    cout<<"2. Local"<<endl;
+    cin>>choice;
+        switch(choice){
+            case 1:{
+                // change international flight
+                cout<<"Enter the FlightID of the flight you would like to modify: ";
+                // Ask the user for the flight details to be replaced
+                string flightID;
+                cin >> flightID;
+                int planeChoice;
+                string plane;
+                string departureCity;
+                char nsth='%';
+                string arrivalCountry;
+                do{
+                    cout<<"What Airplane will be used for this flight?\n";
+                    cout<<"1. PK101\n";
+                    cout<<"2. PK102\n";
+                    cout<<"3. PK103\n";
+                    cout<<"4. PK104\n";
+                    cout<<"5. PK105\n";
+                    cout<<"6. PK106\n";
+                    cout<<"7. PK107\n";
+                    cout<<"8. PK108\n";
+                    cout<<"9. PK109\n";
+                    cout<<"10. PK110\n";
+                    cin>>planeChoice;
+                    switch(planeChoice){
+                        case 1:
+                            plane = "PK101";
+                            break;
+                        case 2:
+                            plane = "PK102";
+                            break;
+                        case 3:
+                            plane = "PK103";
+                            break;
+                        case 4:
+                            plane = "PK104";
+                            break;
+                        case 5:
+                            plane = "PK105";
+                            break;
+                        case 6:
+                            plane = "PK106";
+                            break;
+                        case 7:
+                            plane = "PK107";
+                            break;
+                        case 8:
+                            plane = "PK108";
+                            break;
+                        case 9:
+                            plane = "PK109";
+                            break;
+                        case 10:
+                            plane = "PK110";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+
+                }while(planeChoice<1 || planeChoice>10);
+
+                
+                int depCity;
+                do{
+                    cout<<"Which city is the flight departing from?\n";
+                    cout<<"1. Islamabad\n";
+                    cout<<"2. Lahore\n";
+                    cout<<"3. Quetta\n";
+                    cout<<"4. Peshawar\n";
+                    cout<<"5. Karachi\n";
+                    cin>>depCity;
+                    switch(depCity){
+                        case 1:
+                            departureCity = "Islamabad";
+                            break;
+                        case 2:
+                            departureCity = "Lahore";
+                            break;
+                        case 3:
+                            departureCity = "Quetta";
+                            break;
+                        case 4:
+                            departureCity = "Peshawar";
+                            break;
+                        case 5:
+                            departureCity = "Karachi";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(depCity<1 || depCity>5);
+
+                int ns=0;
+                do{
+                    cout<<"Which Airport are you travelling from? (North/South)\n";
+                    cout<<"1. North\n";
+                    cout<<"2. South\n";
+                    cin>>ns;
+                    
+                    switch(ns){
+                        case 1:
+                            nsth = 'N';
+                            break;
+                        case 2:
+                            nsth = 'S';
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(ns<1 || ns >2);
+
+                cout<<"Which Country is the flight arriving at?\n";
+                // 25 countries
+                int arrCountry;
+                do{
+                    cout<<"1. United States\n";
+                    cout<<"2. Australia\n";
+                    cout<<"3. Bangladesh\n";
+                    cout<<"4. Canada\n";
+                    cout<<"5. China\n";
+                    cout<<"6. Egypt\n";
+                    cout<<"7. France\n";
+                    cout<<"8. Germany\n";
+                    cout<<"9. India\n";
+                    cout<<"10. Iran\n";
+                    cout<<"11. Iraq\n";
+                    cout<<"12. Italy\n";
+                    cout<<"13. Japan\n";
+                    cout<<"14. Malaysia\n";
+                    cout<<"15. Nepal\n";
+                    cout<<"16. New Zealand\n";
+                    cout<<"17. Oman\n";
+                    cout<<"18. Qatar\n";
+                    cout<<"19. Russia\n";
+                    cout<<"20. Saudi Arabia\n";
+                    cout<<"21. South Africa\n";
+                    cout<<"22. Spain\n";
+                    cout<<"23. Sri Lanka\n";
+                    cout<<"24. Turkey\n";
+                    cout<<"25. United Kingdom\n";
+                    cin>>arrCountry;
+                    
+                    switch(arrCountry){
+                        case 1:
+                            arrivalCountry = "United States";
+                            break;
+                        case 2:
+                            arrivalCountry = "Australia";
+                            break;
+                        case 3:
+                            arrivalCountry = "Bangladesh";
+                            break;
+                        case 4:
+                            arrivalCountry = "Canada";
+                            break;
+                        case 5:
+                            arrivalCountry = "China";
+                            break;
+                        case 6:
+                            arrivalCountry = "Egypt";
+                            break;
+                        case 7:
+                            arrivalCountry = "France";
+                            break;
+                        case 8:
+                            arrivalCountry = "Germany";
+                            break;
+                        case 9:
+                            arrivalCountry = "India";
+                            break;
+                        case 10:
+                            arrivalCountry = "Iran";
+                            break;
+                        case 11:
+                            arrivalCountry = "Iraq";
+                            break;
+                        case 12:
+                            arrivalCountry = "Italy";
+                            break;
+                        case 13:
+                            arrivalCountry = "Japan";
+                            break;
+                        case 14:
+                            arrivalCountry = "Malaysia";
+                            break;
+                        case 15:
+                            arrivalCountry = "Nepal";
+                            break;
+                        case 16:
+                            arrivalCountry = "New Zealand";
+                            break;
+                        case 17:
+                            arrivalCountry = "Oman";
+                            break;
+                        case 18:
+                            arrivalCountry = "Qatar";
+                            break;
+                        case 19:
+                            arrivalCountry = "Russia";
+                            break;
+                        case 20:
+                            arrivalCountry = "Saudi Arabia";
+                            break;
+                        case 21:
+                            arrivalCountry = "South Africa";
+                            break;
+                        case 22:
+                            arrivalCountry = "Spain";
+                            break;
+                        case 23:
+                            arrivalCountry = "Sri Lanka";
+                            break;
+                        case 24:
+                            arrivalCountry = "Turkey";
+                            break;
+                        case 25:
+                            arrivalCountry = "United Kingdom";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(arrCountry<1||arrCountry>25);
+
+                cout<<"Enter the departure date in the following format: dd/mm/yyyy\n";
+                string departureDate;
+                cin>>departureDate;
+                cout<<"Enter the departure time in the following format: hh:mm\n";
+                string departureTime;
+                cin>>departureTime;
+                cout<<"Enter the arrival date in the following format: dd/mm/yyyy\n";
+                string arrivalDate;
+                cin>>arrivalDate;
+                cout<<"Enter the arrival time in the following format: hh:mm\n";
+                string arrivalTime;
+                cin>>arrivalTime;
+                // Open the input file and a temporary output file for writing
+                string internationalFlightTxt = "/Users/mahamimran/Files/InternationalFlightSchedule.txt";
+                ifstream fin(internationalFlightTxt);
+                if (!fin) {
+                    cout << "Error opening input file: " << internationalFlightTxt << endl;
+                    return;
+                }
+                string tempFile = "/Users/mahamimran/InternationalFlightSchedule_temp.txt";
+                ofstream fout(tempFile);
+                if (!fout) {
+                    cout << "Error opening temporary output file: " << tempFile << endl;
+                    fin.close();
+                    return;
+                }
+
+                // Read each line from the input file, check if it matches the user's flight details, and write the updated flight details to the temporary output file
+                bool found = false;
+                string line;
+                while (getline(fin, line)) {
+                    // check if the line matches the flight details
+                    if (line.substr(0, flightID.length()) == flightID) {
+                        found = true;
+                        fout << flightID << "%" << plane << "%" << departureCity << "%" << nsth << "%" << arrivalCountry << "%" << departureDate << "%" << departureTime << "%" << arrivalDate << "%" << arrivalTime << "%" << endl;
+                    } else {
+                        fout << line << endl;
+                    }
+                }
+
+                // If no matching line was found, print a message to the user
+                if (!found) {
+                    cout << "No matching flight with the given details was found." << endl;
+                }
+
+                // Close the input and output files
+                fin.close();
+                fout.close();
+
+                // Delete the original input file and rename the temporary output file to the original filename
+                remove(internationalFlightTxt.c_str());
+                rename(tempFile.c_str(), internationalFlightTxt.c_str());
+
+                break;
+        }
+        case 2:{
+            // change local flight
+            cout<<"Enter the FlightID of the flight you would like to modify: ";
+            // Ask the user for the flight details to be replaced
+            string flightID;
+            cin >> flightID;
+            int planeChoice;
+            string plane;
+            do{
+                cout<<"What Airplane will be used for this flight?\n";
+                cout<<"1. PK101\n";
+                cout<<"2. PK102\n";
+                cout<<"3. PK103\n";
+                cout<<"4. PK104\n";
+                cout<<"5. PK105\n";
+                cout<<"6. PK106\n";
+                cout<<"7. PK107\n";
+                cout<<"8. PK108\n";
+                cout<<"9. PK109\n";
+                cout<<"10. PK110\n";
+                cin>>planeChoice;
+                switch(planeChoice){
+                    case 1:
+                        plane = "PK101";
+                        break;
+                    case 2:
+                        plane = "PK102";
+                        break;
+                    case 3:
+                        plane = "PK103";
+                        break;
+                    case 4:
+                        plane = "PK104";
+                        break;
+                    case 5:
+                        plane = "PK105";
+                        break;
+                    case 6:
+                        plane = "PK106";
+                        break;
+                    case 7:
+                        plane = "PK107";
+                        break;
+                    case 8:
+                        plane = "PK108";
+                        break;
+                    case 9:
+                        plane = "PK109";
+                        break;
+                    case 10:
+                        plane = "PK110";
+                        break;
+                    default:
+                        cout<<"Invalid choice. Please try again.\n";
+                        break;
+                }
+
+            }while(planeChoice<1 || planeChoice>10);
+
+            int depCity;
+            string departureCity;
+            do{
+                cout<<"Which city is the flight departing from?\n";
+                cout<<"1. Islamabad\n";
+                cout<<"2. Lahore\n";
+                cout<<"3. Quetta\n";
+                cout<<"4. Peshawar\n";
+                cout<<"5. Karachi\n";
+                cin>>depCity;
+                switch(depCity){
+                    case 1:
+                        departureCity = "Islamabad";
+                        break;
+                    case 2:
+                        departureCity = "Lahore";
+                        break;
+                    case 3:
+                        departureCity = "Quetta";
+                        break;
+                    case 4:
+                        departureCity = "Peshawar";
+                        break;
+                    case 5:
+                        departureCity = "Karachi";
+                        break;
+                    default:
+                        cout<<"Invalid choice. Please try again.\n";
+                        break;
+                }
+            }while(depCity<1 || depCity>5);
+
+            int ns=0;
+            char nschar='%';
+            do{
+                cout<<"Which Airport are you travelling from? (North/South)\n";
+                cout<<"1. North\n";
+                cout<<"2. South\n";
+                cin>>ns;
+                switch(ns){
+                    case 1:
+                        nschar = 'N';
+                        break;
+                    case 2:
+                        nschar = 'S';
+                        break;
+                    default:
+                        cout<<"Invalid choice. Please try again.\n";
+                        break;
+                }
+            }while(ns<1 || ns >2);
+
+            int arrCity;
+            string arrivalCity;
+            do{
+                cout<<"Which city is the flight arriving to\n";
+                cout<<"1. Islamabad\n";
+                cout<<"2. Lahore\n";
+                cout<<"3. Quetta\n";
+                cout<<"4. Peshawar\n";
+                cout<<"5. Karachi\n";
+                cin>>arrCity;
+                switch(arrCity){
+                    case 1:
+                        arrivalCity = "Islamabad";
+                        break;
+                    case 2:
+                        arrivalCity = "Lahore";
+                        break;
+                    case 3:
+                        arrivalCity = "Quetta";
+                        break;
+                    case 4:
+                        arrivalCity = "Peshawar";
+                        break;
+                    case 5:
+                        arrivalCity = "Karachi";
+                        break;
+                    default:
+                        cout<<"Invalid choice. Please try again.\n";
+                        break;
+                }
+            }while(arrCity<1 || arrCity>5);
+
+            int nsto=0;
+            char nsthto='%';
+            do{
+                cout<<"Which Airport are you travelling to? (North/South)\n";
+                cout<<"1. North\n";
+                cout<<"2. South\n";
+                cin>>nsto;
+                switch(nsto){
+                    case 1:
+                        nsthto = 'N';
+                        break;
+                    case 2:
+                        nsthto = 'S';
+                        break;
+                    default:
+                        cout<<"Invalid choice. Please try again.\n";
+                        break;
+                }
+            }while(nsto<1 || nsto >2);
+
+
+            cout<<"Enter the departure date in the following format: dd/mm/yyyy\n";
+            string departureDate;
+            cin>>departureDate;
+            cout<<"Enter the departure time in the following format: hh:mm\n";
+            string departureTime;
+            cin>>departureTime;
+            cout<<"Enter the arrival date in the following format: dd/mm/yyyy\n";
+            string arrivalDate;
+            cin>>arrivalDate;
+            cout<<"Enter the arrival time in the following format: hh:mm\n";
+            string arrivalTime;
+            cin>>arrivalTime;
+            string LocalFlightTxt = "/Users/mahamimran/Files/LocalFlightSchedule.txt";
+            ifstream fin(LocalFlightTxt);
+            if (!fin) {
+                cout << "Error opening input file: " << LocalFlightTxt << endl;
+                return;
+            }
+            string tempFile = "/Users/mahamimran/LocalFlightSchedule_temp.txt";
+            ofstream fout(tempFile);
+            if (!fout) {
+                cout << "Error opening temporary output file: " << tempFile << endl;
+                fin.close();
+                return;
+            }
+
+            // Read each line from the input file, check if it matches the user's flight details, and write the updated flight details to the temporary output file
+            bool found = false;
+            string line;
+            while (getline(fin, line)) {
+                // check if the line matches the flight details
+                if (line.substr(0, flightID.length()) == flightID) {
+                    found = true;
+                    fout<<flightID<<"%"<<plane<<"%"<<departureCity<<"%"<<nschar<<"%"<<arrivalCity<<"%"<<nsthto<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
+                } else {
+                    fout << line << endl;
+                }
+            }
+
+            // If no matching line was found, print a message to the user
+            if (!found) {
+                cout << "No matching flight with the given details was found." << endl;
+            }
+
+            // Close the input and output files
+            fin.close();
+            fout.close();
+
+            // Delete the original input file and rename the temporary output file to the original filename
+            remove(LocalFlightTxt.c_str());
+            rename(tempFile.c_str(), LocalFlightTxt.c_str());
+
+                
+            break;
+            }
+        default:
+            cout<<"Invalid choice. Please try again."<<endl;
+            break;
+    }
+    }while(choice!=1 && choice!=2);
+
+
+    
+}
+void AdminAccount::addNewRoute(){
+    // add new route
     // change flight schedule
     // booking object created, populated and stored in a file
     string departureCity;
-    char nsth;
+    char nsth='%';
     string arrivalCountry;
     
     int choice;
@@ -363,6 +871,63 @@ void AdminAccount::changeFlightSchedule(){
             case 1:{
                 // add international flight
                 // asking admin to enter flight details
+                cout<<"Enter the FlightID: ";
+                string flightID;
+                cin>>flightID;
+                int planeChoice;
+                string plane;
+                do{
+                    cout<<"What Airplane will be used for this flight?\n";
+                    cout<<"1. PK101\n";
+                    cout<<"2. PK102\n";
+                    cout<<"3. PK103\n";
+                    cout<<"4. PK104\n";
+                    cout<<"5. PK105\n";
+                    cout<<"6. PK106\n";
+                    cout<<"7. PK107\n";
+                    cout<<"8. PK108\n";
+                    cout<<"9. PK109\n";
+                    cout<<"10. PK110\n";
+                    cin>>planeChoice;
+                    switch(planeChoice){
+                        case 1:
+                            plane = "PK101";
+                            break;
+                        case 2:
+                            plane = "PK102";
+                            break;
+                        case 3:
+                            plane = "PK103";
+                            break;
+                        case 4:
+                            plane = "PK104";
+                            break;
+                        case 5:
+                            plane = "PK105";
+                            break;
+                        case 6:
+                            plane = "PK106";
+                            break;
+                        case 7:
+                            plane = "PK107";
+                            break;
+                        case 8:
+                            plane = "PK108";
+                            break;
+                        case 9:
+                            plane = "PK109";
+                            break;
+                        case 10:
+                            plane = "PK110";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+
+                }while(planeChoice<1 || planeChoice>10);
+
+                
                 int depCity;
                 do{
                     cout<<"Which city is the flight departing from?\n";
@@ -544,7 +1109,7 @@ void AdminAccount::changeFlightSchedule(){
                 fstream fout;
                 fout.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::out|ios::app);
                 if(fout.is_open()){
-                    fout<<departureCity<<"%"<<nsth<<"%"<<arrivalCountry<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
+                    fout<<flightID<<"%"<<plane<<"%"<<departureCity<<"%"<<nsth<<"%"<<arrivalCountry<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
                 }
                 else cout<<"File not found.\n";
                 fout.close();
@@ -552,6 +1117,62 @@ void AdminAccount::changeFlightSchedule(){
             }
             case 2:{
                 // add local flight
+                cout<<"Enter the FlightID: ";
+                string flightID;
+                cin>>flightID;
+                int planeChoice;
+                string plane;
+                do{
+                    cout<<"What Airplane will be used for this flight?\n";
+                    cout<<"1. PK101\n";
+                    cout<<"2. PK102\n";
+                    cout<<"3. PK103\n";
+                    cout<<"4. PK104\n";
+                    cout<<"5. PK105\n";
+                    cout<<"6. PK106\n";
+                    cout<<"7. PK107\n";
+                    cout<<"8. PK108\n";
+                    cout<<"9. PK109\n";
+                    cout<<"10. PK110\n";
+                    cin>>planeChoice;
+                    switch(planeChoice){
+                        case 1:
+                            plane = "PK101";
+                            break;
+                        case 2:
+                            plane = "PK102";
+                            break;
+                        case 3:
+                            plane = "PK103";
+                            break;
+                        case 4:
+                            plane = "PK104";
+                            break;
+                        case 5:
+                            plane = "PK105";
+                            break;
+                        case 6:
+                            plane = "PK106";
+                            break;
+                        case 7:
+                            plane = "PK107";
+                            break;
+                        case 8:
+                            plane = "PK108";
+                            break;
+                        case 9:
+                            plane = "PK109";
+                            break;
+                        case 10:
+                            plane = "PK110";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+
+                }while(planeChoice<1 || planeChoice>10);
+
                 int depCity;
                 string departureCity;
                 do{
@@ -585,7 +1206,7 @@ void AdminAccount::changeFlightSchedule(){
                 }while(depCity<1 || depCity>5);
 
                 int ns=0;
-                char nschar;
+                char nschar='%';
                 do{
                     cout<<"Which Airport are you travelling from? (North/South)\n";
                     cout<<"1. North\n";
@@ -637,7 +1258,7 @@ void AdminAccount::changeFlightSchedule(){
                 }while(arrCity<1 || arrCity>5);
 
                 int nsto=0;
-                char nsthto;
+                char nsthto='%';
                 do{
                     cout<<"Which Airport are you travelling to? (North/South)\n";
                     cout<<"1. North\n";
@@ -673,7 +1294,7 @@ void AdminAccount::changeFlightSchedule(){
                 fstream fout;
                 fout.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::out|ios::app);
                 if(fout.is_open()){
-                 fout<<departureCity<<"%"<<nschar<<"%"<<arrivalCity<<"%"<<nsthto<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
+                    fout<<flightID<<"%"<<plane<<"%"<<departureCity<<"%"<<nschar<<"%"<<arrivalCity<<"%"<<nsthto<<"%"<<departureDate<<"%"<<departureTime<<"%"<<arrivalDate<<"%"<<arrivalTime<<"%"<<endl;
                 }
                 else cout<<"File not found.\n";
                 fout.close();
@@ -689,9 +1310,6 @@ void AdminAccount::changeFlightSchedule(){
         
     }while(choice!=3);
     
-}
-void AdminAccount::addNewRoute(){
-    // add new route
 }
 void AdminAccount::restrictNumberOfPassengers(){
     // restrict number of passengers
