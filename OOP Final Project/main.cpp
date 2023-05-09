@@ -201,20 +201,20 @@ public:
     FlightSchedule(const FlightSchedule &other);
 
     // getters + setters
-    setDepartureTime(string depTime);
+    void setDepartureTime(string depTime);
     string getDepartureTime() const;
-    setArrivalTime(string arrTime);
+    void setArrivalTime(string arrTime);
     string getArrivalTime() const;
-    setDepartureDate(string depDate);
+    void setDepartureDate(string depDate);
     string getDepartureDate() const;
-    setArrivalDate(string arrDate);
+    void setArrivalDate(string arrDate);
     string getArrivalDate() const;
-    setTicketPrice(double price);
+    void setTicketPrice(double price);
     double getTicketPrice() const;
 
     // methods
-    calculateTicketPrice();
-    changeFlightSchedule(); 
+    void calculateTicketPrice();
+    void changeFlightSchedule();
     // change/cancel 25% deduction
 };
 FlightSchedule::FlightSchedule(){
@@ -238,40 +238,40 @@ FlightSchedule::FlightSchedule(const FlightSchedule &other){
     arrivalDate = other.arrivalDate;
     ticketPrice = other.ticketPrice;
 }
-FlightSchedule::setDepartureTime(string depTime){
+void FlightSchedule::setDepartureTime(string depTime){
     departureTime = depTime;
 }
 string FlightSchedule::getDepartureTime() const{
     return departureTime;
 }
-FlightSchedule::setArrivalTime(string arrTime){
+void FlightSchedule::setArrivalTime(string arrTime){
     arrivalTime = arrTime;
 }
 string FlightSchedule::getArrivalTime() const{
     return arrivalTime;
 }
-FlightSchedule::setDepartureDate(string depDate){
+void FlightSchedule::setDepartureDate(string depDate){
     departureDate = depDate;
 }
 string FlightSchedule::getDepartureDate() const{
     return departureDate;
 }
-FlightSchedule::setArrivalDate(string arrDate){
+void FlightSchedule::setArrivalDate(string arrDate){
     arrivalDate = arrDate;
 }
 string FlightSchedule::getArrivalDate() const{
     return arrivalDate;
 }
-FlightSchedule::setTicketPrice(double price){
+void FlightSchedule::setTicketPrice(double price){
     ticketPrice = price;
 }
 double FlightSchedule::getTicketPrice() const{
     return ticketPrice;
 }
-FlightSchedule::calculateTicketPrice(){
+void FlightSchedule::calculateTicketPrice(){
     // calculate ticket price
 }
-FlightSchedule::changeFlightSchedule(){
+void FlightSchedule::changeFlightSchedule(){
     // change flight schedule
     // change/cancel 25% deduction
 }
@@ -358,8 +358,150 @@ void AdminAccount::changeFlightSchedule(){
         switch(choice){
             case 1:{
                 // add international flight
-
                 // asking admin to enter flight details
+                int depCity;
+                do{
+                    cout<<"Which city is the flight departing from?\n";
+                    cout<<"1. Islamabad\n";
+                    cout<<"2. Lahore\n";
+                    cout<<"3. Quetta\n";
+                    cout<<"4. Peshawar\n";
+                    cout<<"5. Karachi\n";
+                    cin>>depCity;
+                    string departureCity;
+                    switch(depCity){
+                        case 1:
+                            departureCity = "Islamabad";
+                            break;
+                        case 2:
+                            departureCity = "Lahore";
+                            break;
+                        case 3:
+                            departureCity = "Quetta";
+                            break;
+                        case 4:
+                            departureCity = "Peshawar";
+                            break;
+                        case 5:
+                            departureCity = "Karachi";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(depCity<1 || depCity>5);
+                cout<<"Which Country is the flight arriving at?\n";
+                // 25 countries
+                int arrCountry;
+                do{
+                    cout<<"1. United States\n";
+                    cout<<"2. Australia\n";
+                    cout<<"3. Bangladesh\n";
+                    cout<<"4. Canada\n";
+                    cout<<"5. China\n";
+                    cout<<"6. Egypt\n";
+                    cout<<"7. France\n";
+                    cout<<"8. Germany\n";
+                    cout<<"9. India\n";
+                    cout<<"10. Iran\n";
+                    cout<<"11. Iraq\n";
+                    cout<<"12. Italy\n";
+                    cout<<"13. Japan\n";
+                    cout<<"14. Malaysia\n";
+                    cout<<"15. Nepal\n";
+                    cout<<"16. New Zealand\n";
+                    cout<<"17. Oman\n";
+                    cout<<"18. Qatar\n";
+                    cout<<"19. Russia\n";
+                    cout<<"20. Saudi Arabia\n";
+                    cout<<"21. South Africa\n";
+                    cout<<"22. Spain\n";
+                    cout<<"23. Sri Lanka\n";
+                    cout<<"24. Turkey\n";
+                    cout<<"25. United Kingdom\n";
+                    cin>>arrCountry;
+                    string arrivalCountry;
+                    switch(arrCountry){
+                        case 1:
+                            arrivalCountry = "United States";
+                            break;
+                        case 2:
+                            arrivalCountry = "Australia";
+                            break;
+                        case 3:
+                            arrivalCountry = "Bangladesh";
+                            break;
+                        case 4:
+                            arrivalCountry = "Canada";
+                            break;
+                        case 5:
+                            arrivalCountry = "China";
+                            break;
+                        case 6:
+                            arrivalCountry = "Egypt";
+                            break;
+                        case 7:
+                            arrivalCountry = "France";
+                            break;
+                        case 8:
+                            arrivalCountry = "Germany";
+                            break;
+                        case 9:
+                            arrivalCountry = "India";
+                            break;
+                        case 10:
+                            arrivalCountry = "Iran";
+                            break;
+                        case 11:
+                            arrivalCountry = "Iraq";
+                            break;
+                        case 12:
+                            arrivalCountry = "Italy";
+                            break;
+                        case 13:
+                            arrivalCountry = "Japan";
+                            break;
+                        case 14:
+                            arrivalCountry = "Malaysia";
+                            break;
+                        case 15:
+                            arrivalCountry = "Nepal";
+                            break;
+                        case 16:
+                            arrivalCountry = "New Zealand";
+                            break;
+                        case 17:
+                            arrivalCountry = "Oman";
+                            break;
+                        case 18:
+                            arrivalCountry = "Qatar";
+                            break;
+                        case 19:
+                            arrivalCountry = "Russia";
+                            break;
+                        case 20:
+                            arrivalCountry = "Saudi Arabia";
+                            break;
+                        case 21:
+                            arrivalCountry = "South Africa";
+                            break;
+                        case 22:
+                            arrivalCountry = "Spain";
+                            break;
+                        case 23:
+                            arrivalCountry = "Sri Lanka";
+                            break;
+                        case 24:
+                            arrivalCountry = "Turkey";
+                            break;
+                        case 25:
+                            arrivalCountry = "United Kingdom";
+                            break;
+                        default:
+                            cout<<"Invalid choice. Please try again.\n";
+                            break;
+                    }
+                }while(arrCountry<1||arrCountry>25);
 
                 // storing flight object in a file
                 fstream fout;
