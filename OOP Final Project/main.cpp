@@ -7,7 +7,6 @@ class Airplane;
 class City;
 class Country;
 class Booking;
-class Flight;
 class FlightSchedule;
 class Login;
 class AdminAccount;
@@ -20,6 +19,7 @@ bool verifyFinancialDetails(PaymentDetails* pd);
 void passengerRegistration();
 void passengerLogin();
 void adminLogin();
+void populateFlightSchedule();
 void mainMenu();
 
 // Airplane class
@@ -31,6 +31,7 @@ private:
     string status; // in air / landed
     int numofPassengers; //  total 60, 30 can sit (capacity/2)
 };
+
 // City class
 class City{
 private:
@@ -57,34 +58,45 @@ public:
 };
 // Country class
 class Country{
+    string name;
 };
-// Booking class 
-class Booking{
-};
+
 // Flight class 
-class Flight{
-   // FlightSchedule *flightSchedule;
+class Booking{
     Airplane *airplane;
-    Booking *booking;
+    Passenger *passenger;
+    Country *country; // to country
+    City *city; // from city
+    FlightSchedule *flightSchedule; // route details
+    bool isLocal;
+    // if flight is local only populate two city stuff idk omg
+    
+    
+    // display cost by overloading << operator
+    
+public:
+    // constructors 
+    // getters + setters
+    // methods
+        // search for seat on airplane
+        // update flight schedule (25%)
+
+
+
+    // an array of passengers on an airplane
 };
 // FlightSchedule class 
 class FlightSchedule{
-    Country *country; // country travelling to
-    Airplane *airplane;
     string departureTime;
     string arrivalTime;
     string departureDate;
     string arrivalDate;
-    string departureCity;
-    string arrivalCity;
+    string departurePlace;
+    string arrivalPlace;
     double ticketPrice; // calculated in a memeber function called calculateTicketPrice()
     // change/cancel 25% deduction 
 
 };
-
-
-
-
 // Login class
 class Login{
     protected:
@@ -130,6 +142,7 @@ void Login::setPassword(string pw){
 
 // AdminAccount class
 class AdminAccount : public Login{
+    Booking *Booking;
 public:
    // Constructors
     AdminAccount();
@@ -156,6 +169,8 @@ void AdminAccount::displayLoginDetails(){
 }
 void AdminAccount::changeFlightSchedule(){
     // change flight schedule
+    // opens a file for flight schedule, stores all relevant details
+    // flight 
 }
 void AdminAccount::addNewRoute(){
     // add new route
@@ -641,7 +656,7 @@ void passengerLogin(){
             cin>>choice;
             switch(choice){
                 case 1:
-                    // book a flight
+                   // book a flight
                     break;
                 case 2:
                     // reset username
@@ -795,7 +810,11 @@ void mainMenu(){
     }
     }
 }
+void populateFlightSchedule(){
+    
+}
 int main(){
+    populateFlightSchedule();
     mainMenu();
     return 0;
 }
