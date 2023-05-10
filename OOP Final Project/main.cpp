@@ -1750,7 +1750,7 @@ void displayLocalFlights(){
                 else cout<<"file not open"<<endl;
             }
             fin.close();
-
+    
             
 }
 void displayInternationalFlights(){
@@ -1936,6 +1936,12 @@ void passengerLogin(){
     string password;
     string username;
     string name = "";
+    // login
+    int ent = 0;
+    ent++;
+    Login *login;
+    login = new Login[ent];
+
     do{
         cout<<"Enter your username: ";
       
@@ -1987,6 +1993,9 @@ void passengerLogin(){
         break;
     }
 }
+    login[ent-1].setUsername(username2);
+    login[ent-1].setPassword(password2);
+
     bool visaStatus = (visaStatus2 == "1");
     PaymentDetails paymentDetails(cardNumber, expiryDate, cvv);
     PassengerAccount passengerAccount(username2, password2);
@@ -2042,6 +2051,7 @@ void passengerLogin(){
     // if no, then display error message
     // menu should inlude booking flights etc
     // resetting password option should also be available
+    delete [] login;
 }
 void adminLogin(){
     // creates an object of admin and stores the details there
