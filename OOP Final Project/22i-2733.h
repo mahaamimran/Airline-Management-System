@@ -73,7 +73,7 @@ public:
     int getDistance() const;
     void setDistance(int dist);
 };
-// Flight class
+// Booking class
 class Booking{
     Airplane *airplane; // 1
     Passenger *passenger; // 1 or more
@@ -82,14 +82,9 @@ class Booking{
     City *cityTo;
     FlightSchedule *flightSchedule; // route details
     bool isLocal;
-    // if flight is local only populate two city stuff idk omg
-    // display cost by overloading << operator
 public:
-    // constructors
     Booking();
     Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal);
-
-    // Getters
     Airplane* getAirplane() const;
     Passenger* getPassenger() const;
     Country* getCountry() const;
@@ -97,8 +92,6 @@ public:
     City *getCityTo() const;
     FlightSchedule* getFlightSchedule() const;
     bool getIsLocal() const;
-
-    // Setters
     void setAirplane(Airplane* airplane);
     void setPassenger(Passenger* passenger);
     void setCountry(Country* country);
@@ -106,11 +99,6 @@ public:
     void setCityTo(City *cityTo);
     void setFlightSchedule(FlightSchedule* flightSchedule);
     void setIsLocal(bool isLocal);
-    // methods
-        // search for seat on airplane
-        // update flight schedule (25%)
-
-    // overloading operator << to display everything
     friend ostream& operator<<(ostream& os, const Booking& booking);
 };
 // FlightSchedule class
