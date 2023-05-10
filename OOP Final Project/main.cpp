@@ -230,7 +230,26 @@ double FlightSchedule::getTicketPrice() const{
     return ticketPrice;
 }
 void FlightSchedule::calculateTicketPrice(){
-    ticketPrice =( stoi(arrivalTime.substr(0,1)) - stoi(departureTime.substr(0,1)) ) * 100;
+    ticketPrice =( stoi(arrivalTime.substr(0,1)) - stoi(departureTime.substr(0,1)) ) * 20000;
+    cout<<"Total Price: "<<ticketPrice<<endl;
+    int choice=0;
+    do{
+        cout<<"Was the flight International or Local?\n";
+        cout<<"1. International\n";
+        cout<<"2. Local\n";
+        cin>>choice;
+            if(choice==1){
+                ticketPrice = 1.05*ticketPrice;
+            }
+            else if(choice==2){
+                ticketPrice = 1.1*ticketPrice;
+            }
+            else{
+                cout<<"Invalid choice\n";
+            }
+    }while(choice!=1 && choice!=2);
+    cout<<"Price with Tax deduction: "<<ticketPrice<<endl;
+    
 }
 void FlightSchedule::changeFlightSchedule(){
     ticketPrice = 0.75 * ticketPrice;
@@ -1432,12 +1451,30 @@ void Passenger::setPaymentDetails(PaymentDetails* pd){
 
 void Passenger::viewMostVisitedCountry(){
     // display most visited country
+    fstream file;
+    file.open("mostVisitedCountry.txt",ios::in);
+    string line;
+    while(getline(file,line)){
+        cout<<line<<endl;
+    }
+    file.close();
+    cout<<"You haven't visited enough countries yet.\n";
 }
 void Passenger::viewTravellingCost(){
     // display travelling cost
+    fstream file;
+    file.open("travellingCost.txt",ios::in);
+    string line;
+    while(getline(file,line)){
+        cout<<line<<endl;
+    }
+    file.close();
+    cout<<"How many hours do you plan to travel?\n";
+    int hours;
+    cin>>hours;
+    hours = hours * 20000;
+    cout<<"Your estimated travelling cost is: "<<hours<<endl;
 }
-
-
 // werid placement ik
 void PassengerAccount::resetPassword(Passenger passenger,string name){
     cout<<"Enter new password: ";
@@ -1876,7 +1913,8 @@ void bookFlight(Passenger passenger){
                 // Calculate duration in minutes
                 double durationMinutes = arrivalTotalMinutes - departureTotalMinutes;
                 double durationHours = durationMinutes / 60.0;
-
+                
+                
                 Country country(arrivalCountry,800*durationHours);
                 Booking booking(&airplane,&passenger,&country,&city,&c,&flightSchedule,0);
                 // BOOKING OBJECT CREATED HERE
@@ -2043,8 +2081,7 @@ void adminLogin(){
         cout<<"2. Change Flight Schedule\n";
         cout<<"3. Add new route\n";
         cout<<"4. Restrict number of passengers\n";
-        cout<<"5. Update inquiry details\n";
-        cout<<"6. Exit\n";
+        cout<<"5. Exit\n";
         cin>>choice;
         switch(choice){
             case 1:
@@ -2064,17 +2101,13 @@ void adminLogin(){
                 adminAccount.restrictNumberOfPassengers();
                 break;
             case 5:
-                // update inquiry details
-               // adminAccount.updateInquiryDetails();
-                break;
-            case 6:
                 // exit
                 cout<<"exiting..."<<endl;
                 break;
             default:
                 cout<<"Invalid choice entered. Please try again.\n";
         }
-        }while(choice!=6);
+        }while(choice!=5);
     }
     else{
         adminLogin();
