@@ -216,6 +216,9 @@ public:
     // methods
         // search for seat on airplane
         // update flight schedule (25%)
+
+    // overloading operator << to display everything
+    friend ostream& operator<<(ostream& os, const Booking& booking);
 };
 Booking::Booking():airplane(nullptr),passenger(nullptr),country(nullptr),city(nullptr),cityTo(nullptr),flightSchedule(nullptr),isLocal(false){}
 Booking::Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal){
@@ -397,8 +400,8 @@ string Login::getUsername() const{
 void Login::setUsername(string un){
     username = un;
 }
-string Login::getPassword() const{
-    return password;
+string Login::getPassword() const {
+    return string(password.length(), '*');
 }
 void Login::setPassword(string pw){
     password = pw;
@@ -1499,8 +1502,8 @@ string PaymentDetails::getExpiryDate() const{
 void PaymentDetails::setExpiryDate(string ed){
     expiryDate = ed;
 }
-string PaymentDetails::getCvv() const{
-    return cvv;
+string PaymentDetails::getCvv() const {
+    return string(cvv.length(), '*');
 }
 void PaymentDetails::setCvv(string cv){
     cvv = cv;
@@ -1661,10 +1664,25 @@ ostream& operator<<(ostream& os,const Passenger& p){
     os<<"CNIC: "<<p.cnic<<endl;
     os<<"Visa Status: "<<p.visaStatus<<endl;
     os<<"Login Username: "<<p.login->getUsername()<<endl;
-    // displaying *** instead of password
-    string pwd="";
-    for(int i=0;i<p.login->getPassword().length();i++) pwd+="*";
-    os<<"Login Password: "<<pwd<<endl;
+    os<<"Login Password: "<<p.login->getPassword()<<endl;
+    return os;
+}
+
+
+// booking overloaded poperator
+ostream& operator<<(ostream& os, const Booking& booking) {
+    os << "Airplane ID: " << booking.airplane->getAirplaneID() << endl;
+    os << "Economy Capacity: " << booking.airplane->getCapacityEconomy() << endl;
+    os << "Business Class Capacity: " << booking.airplane->getCapacityBusiness() << endl;
+    os << "Name: " << booking.getPassenger()->getName() << endl;
+    os << "Passport Number: " << booking.getPassenger()->getPassportNumber() << endl;
+    os << "CNIC: " << booking.getPassenger()->getCnic() << endl;
+    os << "Visa Status: " << (booking.getPassenger()->getVisaStatus() ? "Valid" : "Invalid") << endl;
+    os << "Username: "<<booking.getPassenger()->getLogin()->getUsername()<<endl;
+    os << "Password: "<<booking.getPassenger()->getLogin()->getPassword()<<endl;
+    os << "Card Number: "<<booking.getPassenger()->getPaymentDetails()->getCardNumber()<<endl;
+    os << "Expiry Date: " << booking.getPassenger()->getPaymentDetails()->getExpiryDate() << endl;
+    os << "CVV: " << booking.getPassenger()->getPaymentDetails()->getCvv() << endl;
     return os;
 }
 
@@ -1909,7 +1927,6 @@ void bookFlight(Passenger passenger){
                     }
                 }
                 fin.close();
-                cout<<line<<endl;
                 string plane, departureCity, nsth, arrivalCity, nsthtostring, departureDate, departureTime, arrivalDate, arrivalTime;
                 stringstream ss(line);
 
@@ -1941,6 +1958,7 @@ void bookFlight(Passenger passenger){
                 flightSchedule.calculateTicketPrice();
                 Country c;
                 Booking booking(&airplane,&passenger,&c,&city,&city2,&flightSchedule,1);
+                // BOOKING OBJECT CREATED HERE
                 break;
             }
             case 2:{
@@ -1983,6 +2001,33 @@ void bookFlight(Passenger passenger){
                 cout << "Departure Time: " << departureTime << endl;
                 cout << "Arrival Date: " << arrivalDate << endl;
                 cout << "Arrival Time: " << arrivalTime << endl;
+                
+                Airplane airplane(plane,economySeats,businessSeats,++passengers);
+                // passenger passed
+                City city(departureCity,nsth[0]);
+                City c;
+                FlightSchedule flightSchedule(departureTime,arrivalTime,departureDate,arrivalDate,0);
+                flightSchedule.calculateTicketPrice();
+                // calculating distance
+                // Convert departure time to minutes
+                int departureHours = stoi(departureTime.substr(0, 2));
+                int departureMinutes = stoi(departureTime.substr(3, 2));
+                int departureTotalMinutes = departureHours * 60 + departureMinutes;
+                
+                // Convert arrival time to minutes
+                int arrivalHours = stoi(arrivalTime.substr(0, 2));
+                int arrivalMinutes = stoi(arrivalTime.substr(3, 2));
+                int arrivalTotalMinutes = arrivalHours * 60 + arrivalMinutes;
+
+                // Calculate duration in minutes
+                double durationMinutes = arrivalTotalMinutes - departureTotalMinutes;
+                double durationHours = durationMinutes / 60.0;
+
+                Country country(arrivalCountry,800*durationHours);
+                Booking booking(&airplane,&passenger,&country,&city,&c,&flightSchedule,0);
+                // BOOKING OBJECT CREATED HERE
+                cout<<"Booking successful!"<<endl;
+                cout<<booking;
                 break;
             }
             case 3:
@@ -2258,8 +2303,6 @@ void mainMenu(){
                                     break;
                             }
                         }while(choice!=3);
-
-                        passengerRegistration();
                         break;
                     }
                     case 3:
