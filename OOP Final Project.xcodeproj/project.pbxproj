@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA7AB91D29FD939D00A30057 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA7AB91C29FD939D00A30057 /* main.cpp */; };
+		EA7AB91D29FD939D00A30057 /* 22i-2733.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA7AB91C29FD939D00A30057 /* 22i-2733.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,9 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		EA7230E12A0BF06C006FE883 /* header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = header.h; sourceTree = "<group>"; };
+		EA7230E12A0BF06C006FE883 /* 22i-2733.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "22i-2733.h"; sourceTree = "<group>"; };
 		EA7AB91929FD939D00A30057 /* OOP Final Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OOP Final Project"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA7AB91C29FD939D00A30057 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		EA7AB91C29FD939D00A30057 /* 22i-2733.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "22i-2733.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +58,8 @@
 		EA7AB91B29FD939D00A30057 /* OOP Final Project */ = {
 			isa = PBXGroup;
 			children = (
-				EA7AB91C29FD939D00A30057 /* main.cpp */,
-				EA7230E12A0BF06C006FE883 /* header.h */,
+				EA7AB91C29FD939D00A30057 /* 22i-2733.cpp */,
+				EA7230E12A0BF06C006FE883 /* 22i-2733.h */,
 			);
 			path = "OOP Final Project";
 			sourceTree = "<group>";
@@ -121,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA7AB91D29FD939D00A30057 /* main.cpp in Sources */,
+				EA7AB91D29FD939D00A30057 /* 22i-2733.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
