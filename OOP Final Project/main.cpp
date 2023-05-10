@@ -18,13 +18,13 @@ class PaymentDetails;
 void storePassengerDetailsinFile(Passenger &passenger,string name);
 bool verifyFinancialDetails(PaymentDetails* pd);
 void passengerRegistration();
-void passengerLogin();
-void adminLogin();
-void populateFlightSchedule();
-void mainMenu();
 void displayLocalFlights();
 void displayInternationalFlights();
 void bookFlight(Passenger passenger);
+void passengerLogin();
+void adminLogin();
+void guestLogin();
+void mainMenu();
 
 const int economySeats = 50;
 const int businessSeats = 10;
@@ -1436,14 +1436,10 @@ PassengerAccount::PassengerAccount():Login("",""){}
 PassengerAccount::PassengerAccount(string un,string pwd):Login(un,pwd){}
 PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other){}
 void PassengerAccount::displayAccountDetails(){
-    string pwd="";
-    for(int i=0;i<password.length();i++) pwd+="*";
     cout<<"username: "<<username<<endl;
-    cout<<"password: "<<pwd<<endl;
+    cout<<"password: "<<getPassword()<<endl;
     // display username and password
 }
-
-
 bool PassengerAccount::operator==(const PassengerAccount &other){
     if(username==other.username && password==other.password) return true;
     return false;
@@ -1546,7 +1542,6 @@ public:
     // Member Functions
     void viewMostVisitedCountry();
     void viewTravellingCost();
-    void updateDetails();
 
     // overloading<<operator
     friend ostream& operator<<(ostream& os,const Passenger& p);
@@ -1618,9 +1613,6 @@ void Passenger::viewMostVisitedCountry(){
 }
 void Passenger::viewTravellingCost(){
     // display travelling cost
-}
-void Passenger::updateDetails(){
-    // update details
 }
 
 
