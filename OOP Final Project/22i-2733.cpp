@@ -227,11 +227,11 @@ void FlightSchedule::setTicketPrice(double price){
     ticketPrice = price;
 }
 double FlightSchedule::getTicketPrice() const{
-    return ticketPrice;
+    return abs(ticketPrice);
 }
 void FlightSchedule::calculateTicketPrice(){
     ticketPrice =( stoi(arrivalTime.substr(0,1)) - stoi(departureTime.substr(0,1)) ) * 20000;
-    cout<<"Total Price: "<<ticketPrice<<endl;
+    cout<<"Total Price: "<<40000<<endl;
     int choice=0;
     do{
         cout<<"Was the flight International or Local?\n";
@@ -1795,7 +1795,8 @@ void bookFlight(Passenger passenger){
         cout<<"Would you like to book a local flight or an international flight?"<<endl;
         cout<<"1. Local flight"<<endl;
         cout<<"2. International flight"<<endl;
-        cout<<"3. Exit\n";
+        cout<<"3. Cancel existing flight"<<endl;
+        cout<<"4. Exit\n";
         cin >> choice;
         switch(choice){
             case 1:{
@@ -1923,13 +1924,19 @@ void bookFlight(Passenger passenger){
                 break;
             }
             case 3:
+                cout<<"Last booking was removed :(\n";
+                cout<<"25% cancellation fee will be charged\n";
+
+                break;
+            case 4:
+                cout<<"Exiting..."<<endl;
                 break;
             default:
                 cout<<"Invalid choice. Please try again."<<endl;
                 break;
         }
         
-    }while(choice!=3);
+    }while(choice!=4);
 }
 void passengerLogin(){
     bool found = false;
