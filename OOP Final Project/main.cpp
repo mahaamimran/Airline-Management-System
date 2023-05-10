@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 using namespace std;
 class Airplane;
 class City;
@@ -21,7 +22,13 @@ void passengerLogin();
 void adminLogin();
 void populateFlightSchedule();
 void mainMenu();
+void displayLocalFlights();
+void displayInternationalFlights();
+void bookFlight(Passenger passenger);
 
+const int economySeats = 50;
+const int businessSeats = 10;
+int passengers=0;
 // Airplane class
 class Airplane{ 
 private:
@@ -32,7 +39,7 @@ private:
 public:
     // constructors
     Airplane();
-    Airplane(int id,int capE,int capB,int num);
+    Airplane(string id,int capE,int capB,int num);
     Airplane(const Airplane &other);
 
     // getters and setters
@@ -51,7 +58,7 @@ Airplane::Airplane(){
     capacityBusiness = 0;
     numofPassengers = 0;
 }
-Airplane::Airplane(int id,int capE,int capB,int num){
+Airplane::Airplane(string id,int capE,int capB,int num){
     airplaneID = id;
     capacityEconomy = capE;
     capacityBusiness = capB;
@@ -92,13 +99,11 @@ class City{
 private:
     string cityName;
     char NorthSouth; // 'N' or 'S'
-    int distance; 
-    Airplane *airplane; // 10 airplanes max
-    int numberOfAirplanes;
+    
 public:
     // constructors
     City();
-    City(string name,char NS,Airplane *a,int num);
+    City(string name,char NS);
     City(const City &other);
 
     // getters and setters
@@ -106,12 +111,34 @@ public:
     void setCityName(string name);
     char getNorthSouth() const;
     void setNorthSouth(char NS);
-    Airplane* getAirplane(int index) const;
-    void setAirplane(Airplane *a,int index);
-    int getNumberOfAirplanes() const;
-    void setNumberOfAirplanes(int num);
-    
+   
 };
+City::City(){
+    cityName = "";
+    NorthSouth = 'M'; // empty ahah
+}
+City::City(string name,char NS){
+    cityName = name;
+    NorthSouth = NS;
+}
+City::City(const City &other){
+    cityName = other.cityName;
+    NorthSouth = other.NorthSouth;
+}
+string City::getCityName() const{
+    return cityName;
+}
+void City::setCityName(string name){
+    cityName = name;
+}
+char City::getNorthSouth() const{
+    return NorthSouth;
+}
+void City::setNorthSouth(char NS){
+    NorthSouth = NS;
+}
+
+
 // Country class
 class Country{
     string name;
@@ -159,21 +186,92 @@ class Booking{
     Passenger *passenger; // 1 or more 
     Country *country; // 1 to country
     City *city; // 1 from city
+    City *cityTo;
     FlightSchedule *flightSchedule; // route details
     bool isLocal;
     // if flight is local only populate two city stuff idk omg
     // display cost by overloading << operator
 public:
     // constructors 
-    // getters + setters
+    Booking();
+    Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal);
+
+    // Getters
+    Airplane* getAirplane() const;
+    Passenger* getPassenger() const;
+    Country* getCountry() const;
+    City* getCity() const;
+    City *getCityTo() const;
+    FlightSchedule* getFlightSchedule() const;
+    bool getIsLocal() const;
+
+    // Setters
+    void setAirplane(Airplane* airplane);
+    void setPassenger(Passenger* passenger);
+    void setCountry(Country* country);
+    void setCity(City* city);
+    void setCityTo(City *cityTo);
+    void setFlightSchedule(FlightSchedule* flightSchedule);
+    void setIsLocal(bool isLocal);
     // methods
         // search for seat on airplane
         // update flight schedule (25%)
-
+};
+Booking::Booking():airplane(nullptr),passenger(nullptr),country(nullptr),city(nullptr),cityTo(nullptr),flightSchedule(nullptr),isLocal(false){}
+Booking::Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal){
+    this->airplane = airplane;
+    this->passenger = passenger;
+    this->country = country;
+    this->city = city;
+    this->cityTo = cityTo;
+    this->flightSchedule = flightSchedule;
+    this->isLocal = isLocal;
+}
+Airplane* Booking::getAirplane() const{
+    return airplane;
+}
+Passenger* Booking::getPassenger() const{
+    return passenger;
+}
+Country* Booking::getCountry() const{
+    return country;
+}
+City* Booking::getCity() const{
+    return city;
+}
+City *Booking::getCityTo() const{
+    return cityTo;
+}
+FlightSchedule* Booking::getFlightSchedule() const{
+    return flightSchedule;
+}
+bool Booking::getIsLocal() const{
+    return isLocal;
+}
+void Booking::setAirplane(Airplane* airplane){
+    this->airplane = airplane;
+}
+void Booking::setPassenger(Passenger* passenger){
+    this->passenger = passenger;
+}
+void Booking::setCountry(Country* country){
+    this->country = country;
+}
+void Booking::setCity(City* city){
+    this->city = city;
+}
+void Booking::setCityTo(City *cityTo){
+    this->cityTo = cityTo;
+}
+void Booking::setFlightSchedule(FlightSchedule* flightSchedule){
+    this->flightSchedule = flightSchedule;
+}
+void Booking::setIsLocal(bool isLocal){
+    this->isLocal = isLocal;
+}
 
 
     // an array of passengers on an airplane
-};
 // FlightSchedule class 
 class FlightSchedule{
     string departureTime;
@@ -1706,6 +1804,196 @@ void passengerRegistration(){
     // menu should inlude booking flights etc
     // resetting password option should also be available
 }
+void displayLocalFlights(){
+        cout<<"Local flights:\n";
+            string flightID, plane, departureCity, arrivalCity, departureDate, departureTime, arrivalDate, arrivalTime;
+            char nschar, nsthto;
+            string nscharstring, nsthtostring;
+            // display local flights
+            fstream fin;
+            fin.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::in);
+            while(fin){
+                if(fin.is_open()){
+                    getline(fin, flightID, '%');
+                    getline(fin, plane, '%');
+                    getline(fin, departureCity, '%');
+                    getline(fin, nscharstring, '%');
+                    getline(fin, arrivalCity, '%'); 
+                    getline(fin, nsthtostring, '%');
+                    getline(fin, departureDate, '%');
+                    getline(fin, departureTime, '%');
+                    getline(fin, arrivalDate, '%');
+                    getline(fin, arrivalTime, '%');
+                    nsthto = nsthtostring[0];
+                    nschar = nscharstring[0];
+                    cout<<"Flight ID: "<<flightID<<endl;
+                    cout<<"Plane: "<<plane<<endl;
+                    cout<<"Departure City: "<<departureCity<<endl;
+                    cout<<"North/South: "<<nschar<<endl;
+                    cout<<"Arrival City: "<<arrivalCity<<endl;
+                    cout<<"North/South: "<<nsthto<<endl;
+                    cout<<"Departure Date: "<<departureDate<<endl;
+                    cout<<"Departure Time: "<<departureTime<<endl;
+                    cout<<"Arrival Date: "<<arrivalDate<<endl;
+                    cout<<"Arrival Time: "<<arrivalTime<<endl;
+                    cout<<endl;
+                }
+                else cout<<"file not open"<<endl;
+            }
+            fin.close();
+
+            
+}
+void displayInternationalFlights(){
+    // display international flights
+            cout<<"International flights:\n";
+            string flightID, plane, departureCity, arrivalCountry, departureDate, departureTime, arrivalDate, arrivalTime;
+            char nsth;
+            string nsthstring;
+            // display local flights
+            fstream fin;
+            fin.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::in);
+            while(fin){
+                if(fin.is_open()){
+                    getline(fin, flightID, '%');
+                    getline(fin, plane, '%');
+                    getline(fin, departureCity, '%');
+                    getline(fin, nsthstring, '%');
+                    getline(fin, arrivalCountry, '%');
+                    getline(fin, departureDate, '%');
+                    getline(fin, departureTime, '%');
+                    getline(fin, arrivalDate, '%');
+                    getline(fin, arrivalTime, '%');
+                    nsth = nsthstring[0];
+                    cout<<"Flight ID: "<<flightID<<endl;
+                    cout<<"Plane: "<<plane<<endl;
+                    cout<<"Departure City: "<<departureCity<<endl;
+                    cout<<"North/South: "<<nsth<<endl;
+                    cout<<"Arrival Country: "<<arrivalCountry<<endl;
+                    cout<<"Departure Date: "<<departureDate<<endl;
+                    cout<<"Departure Time: "<<departureTime<<endl;
+                    cout<<"Arrival Date: "<<arrivalDate<<endl;
+                    cout<<"Arrival Time: "<<arrivalTime<<endl;
+                    cout<<endl;
+                }
+                else cout<<"file not open"<<endl;
+            }
+            fin.close();
+}
+void bookFlight(Passenger passenger){
+    int choice;
+    do{
+        cout<<"Would you like to book a local flight or an international flight?"<<endl;
+        cout<<"1. Local flight"<<endl;
+        cout<<"2. International flight"<<endl;
+        cout<<"3. Exit\n";
+        cin >> choice;
+        switch(choice){
+            case 1:{
+                displayLocalFlights();
+                cout<<"Enter the Flight ID you would like to book: ";
+                string flightID;
+                cin >> flightID;
+                // check if flight exists
+                bool found = false;
+                fstream fin;
+                fin.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::in);
+                string line;
+                while(!fin.eof()){
+                    getline(fin,line);
+                    if(line.find(flightID) != string::npos){
+                        found = true;
+                        cout<<"Flight found!"<<endl;
+                        // book flight
+                        break;
+                    }
+                }
+                fin.close();
+                cout<<line<<endl;
+                string plane, departureCity, nsth, arrivalCity, nsthtostring, departureDate, departureTime, arrivalDate, arrivalTime;
+                stringstream ss(line);
+
+                getline(ss, flightID, '%');
+                getline(ss, plane, '%');
+                getline(ss, departureCity, '%');
+                getline(ss, nsth, '%');
+                getline(ss, arrivalCity, '%');
+                getline(ss, nsthtostring, '%');
+                getline(ss, departureDate, '%');
+                getline(ss, departureTime, '%');
+                getline(ss, arrivalDate, '%');
+                getline(ss, arrivalTime, '%');
+                cout << "Plane: " << plane << endl;
+                cout << "Departure City: " << departureCity << endl;
+                cout << "North/South: " << nsth << endl;
+                cout << "Arrival City: " << arrivalCity << endl;
+                cout << "North/South: " << nsthtostring << endl;
+                cout << "Departure Date: " << departureDate << endl;
+                cout << "Departure Time: " << departureTime << endl;
+                cout << "Arrival Date: " << arrivalDate << endl;
+                cout << "Arrival Time: " << arrivalTime << endl;
+                
+                Airplane airplane(plane,economySeats,businessSeats,++passengers);
+                // passenger passed
+                City city(departureCity,nsth[0]);
+                City city2(arrivalCity,nsthtostring[0]);
+                FlightSchedule flightSchedule(departureTime,arrivalTime,departureDate,arrivalDate,0);
+                flightSchedule.calculateTicketPrice();
+                Country c;
+                Booking booking(&airplane,&passenger,&c,&city,&city2,&flightSchedule,1);
+                break;
+            }
+            case 2:{
+                displayInternationalFlights();
+                cout<<"Enter the Flight ID you would like to book: ";
+                string flightID;
+                cin >> flightID;
+                // check if flight exists
+                bool found = false;
+                fstream fin;
+                fin.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::in);
+                string line;
+                while(!fin.eof()){
+                    getline(fin,line);
+                    if(line.find(flightID) != string::npos){
+                        found = true;
+                        cout<<"Flight found!"<<endl;
+                        // book flight
+                        break;
+                    }   
+                }
+                fin.close();
+                string plane, departureCity, nsth, arrivalCountry, departureDate, departureTime, arrivalDate, arrivalTime;
+                stringstream ss(line);
+                getline(ss, flightID, '%');
+                getline(ss, plane, '%');
+                getline(ss, departureCity, '%');
+                getline(ss, nsth, '%');
+                getline(ss, arrivalCountry, '%');
+                getline(ss, departureDate, '%');
+                getline(ss, departureTime, '%');
+                getline(ss, arrivalDate, '%');
+                getline(ss, arrivalTime, '%');
+                cout << "Flight ID: " << flightID << endl;
+                cout << "Plane: " << plane << endl;
+                cout << "Departure City: " << departureCity << endl;
+                cout << "North/South: " << nsth << endl;
+                cout << "Arrival Country: " << arrivalCountry << endl;
+                cout << "Departure Date: " << departureDate << endl;
+                cout << "Departure Time: " << departureTime << endl;
+                cout << "Arrival Date: " << arrivalDate << endl;
+                cout << "Arrival Time: " << arrivalTime << endl;
+                break;
+            }
+            case 3:
+                break;
+            default:
+                cout<<"Invalid choice. Please try again."<<endl;
+                break;
+        }
+        
+    }while(choice!=3);
+}
 void passengerLogin(){
     bool found = false;
     string password;
@@ -1786,6 +2074,7 @@ void passengerLogin(){
             switch(choice){
                 case 1:
                    // book a flight
+                    bookFlight(passenger);
                     break;
                 case 2:
                     // reset username
@@ -1905,79 +2194,11 @@ void guestLogin(){
     cin>>choice;
     switch(choice){
         case 1:{
-            cout<<"Local flights:\n";
-            string flightID, plane, departureCity, arrivalCity, departureDate, departureTime, arrivalDate, arrivalTime;
-            char nschar, nsthto;
-            string nscharstring, nsthtostring;
-            // display local flights
-            fstream fin;
-            fin.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::in);
-            while(fin){
-                if(fin.is_open()){
-                    getline(fin, flightID, '%');
-                    getline(fin, plane, '%');
-                    getline(fin, departureCity, '%');
-                    getline(fin, nscharstring, '%');
-                    getline(fin, arrivalCity, '%'); 
-                    getline(fin, nsthtostring, '%');
-                    getline(fin, departureDate, '%');
-                    getline(fin, departureTime, '%');
-                    getline(fin, arrivalDate, '%');
-                    getline(fin, arrivalTime, '%');
-                    nsthto = nsthtostring[0];
-                    nschar = nscharstring[0];
-                    cout<<"Flight ID: "<<flightID<<endl;
-                    cout<<"Plane: "<<plane<<endl;
-                    cout<<"Departure City: "<<departureCity<<endl;
-                    cout<<"North/South: "<<nschar<<endl;
-                    cout<<"Arrival City: "<<arrivalCity<<endl;
-                    cout<<"North/South: "<<nsthto<<endl;
-                    cout<<"Departure Date: "<<departureDate<<endl;
-                    cout<<"Departure Time: "<<departureTime<<endl;
-                    cout<<"Arrival Date: "<<arrivalDate<<endl;
-                    cout<<"Arrival Time: "<<arrivalTime<<endl;
-                    cout<<endl;
-                }
-                else cout<<"file not open"<<endl;
-            }
-            fin.close();
+            displayLocalFlights();
             break;
         }
         case 2:{
-            // display international flights
-            cout<<"International flights:\n";
-            string flightID, plane, departureCity, arrivalCountry, departureDate, departureTime, arrivalDate, arrivalTime;
-            char nsth;
-            string nsthstring;
-            // display local flights
-            fstream fin;
-            fin.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::in);
-            while(fin){
-                if(fin.is_open()){
-                    getline(fin, flightID, '%');
-                    getline(fin, plane, '%');
-                    getline(fin, departureCity, '%');
-                    getline(fin, nsthstring, '%');
-                    getline(fin, arrivalCountry, '%');
-                    getline(fin, departureDate, '%');
-                    getline(fin, departureTime, '%');
-                    getline(fin, arrivalDate, '%');
-                    getline(fin, arrivalTime, '%');
-                    nsth = nsthstring[0];
-                    cout<<"Flight ID: "<<flightID<<endl;
-                    cout<<"Plane: "<<plane<<endl;
-                    cout<<"Departure City: "<<departureCity<<endl;
-                    cout<<"North/South: "<<nsth<<endl;
-                    cout<<"Arrival Country: "<<arrivalCountry<<endl;
-                    cout<<"Departure Date: "<<departureDate<<endl;
-                    cout<<"Departure Time: "<<departureTime<<endl;
-                    cout<<"Arrival Date: "<<arrivalDate<<endl;
-                    cout<<"Arrival Time: "<<arrivalTime<<endl;
-                    cout<<endl;
-                }
-                else cout<<"file not open"<<endl;
-            }
-            fin.close();
+            displayInternationalFlights();
             break;
         }
         case 3:
@@ -2064,8 +2285,8 @@ void mainMenu(){
         }
     }
 }
+
 int main(){
-    guestLogin();
-    //mainMenu();
+    mainMenu();
     return 0;
 }
