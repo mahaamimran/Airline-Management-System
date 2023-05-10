@@ -257,11 +257,10 @@ double FlightSchedule::getTicketPrice() const{
     return ticketPrice;
 }
 void FlightSchedule::calculateTicketPrice(){
-    // calculate ticket price
+    ticketPrice =( stoi(arrivalTime.substr(0,1)) - stoi(departureTime.substr(0,1)) ) * 100;
 }
 void FlightSchedule::changeFlightSchedule(){
-    // change flight schedule
-    // change/cancel 25% deduction
+    ticketPrice = 0.75 * ticketPrice;
 }
 
 // Login class
@@ -320,7 +319,7 @@ public:
     void changeFlightSchedule();
     void addNewRoute();
     void restrictNumberOfPassengers();
-    void updateInquiryDetails();
+    // updates in these functions
 };
 AdminAccount::AdminAccount():Login("",""){}
 AdminAccount::AdminAccount(string un,string pw):Login(un,pw){}
@@ -1314,9 +1313,7 @@ void AdminAccount::addNewRoute(){
 void AdminAccount::restrictNumberOfPassengers(){
     // restrict number of passengers
 }
-void AdminAccount::updateInquiryDetails(){
-    // update inquiry details
-}
+
 
 // PassengerAccount class definition
 class PassengerAccount : public Login{
@@ -1880,7 +1877,7 @@ void adminLogin(){
                 break;
             case 5:
                 // update inquiry details
-                adminAccount.updateInquiryDetails();
+               // adminAccount.updateInquiryDetails();
                 break;
             case 6:
                 // exit
@@ -1895,6 +1892,102 @@ void adminLogin(){
         adminLogin();
     }
 
+}
+void guestLogin(){
+    cout<<"As a guest you can only view flight details\n";
+    // open file and read all details
+    int choice;
+    do{
+    cout<<"Which flights would you like to know the details of?\n";
+    cout<<"1. Local\n";
+    cout<<"2. International\n";
+    cout<<"3. Exit\n";
+    cin>>choice;
+    switch(choice){
+        case 1:{
+            cout<<"Local flights:\n";
+            string flightID, plane, departureCity, arrivalCity, departureDate, departureTime, arrivalDate, arrivalTime;
+            char nschar, nsthto;
+            string nscharstring, nsthtostring;
+            // display local flights
+            fstream fin;
+            fin.open("/Users/mahamimran/Files/LocalFlightSchedule.txt",ios::in);
+            while(fin){
+                if(fin.is_open()){
+                    getline(fin, flightID, '%');
+                    getline(fin, plane, '%');
+                    getline(fin, departureCity, '%');
+                    getline(fin, nscharstring, '%');
+                    getline(fin, arrivalCity, '%'); 
+                    getline(fin, nsthtostring, '%');
+                    getline(fin, departureDate, '%');
+                    getline(fin, departureTime, '%');
+                    getline(fin, arrivalDate, '%');
+                    getline(fin, arrivalTime, '%');
+                    nsthto = nsthtostring[0];
+                    nschar = nscharstring[0];
+                    cout<<"Flight ID: "<<flightID<<endl;
+                    cout<<"Plane: "<<plane<<endl;
+                    cout<<"Departure City: "<<departureCity<<endl;
+                    cout<<"North/South: "<<nschar<<endl;
+                    cout<<"Arrival City: "<<arrivalCity<<endl;
+                    cout<<"North/South: "<<nsthto<<endl;
+                    cout<<"Departure Date: "<<departureDate<<endl;
+                    cout<<"Departure Time: "<<departureTime<<endl;
+                    cout<<"Arrival Date: "<<arrivalDate<<endl;
+                    cout<<"Arrival Time: "<<arrivalTime<<endl;
+                    cout<<endl;
+                }
+                else cout<<"file not open"<<endl;
+            }
+            fin.close();
+            break;
+        }
+        case 2:{
+            // display international flights
+            cout<<"International flights:\n";
+            string flightID, plane, departureCity, arrivalCountry, departureDate, departureTime, arrivalDate, arrivalTime;
+            char nsth;
+            string nsthstring;
+            // display local flights
+            fstream fin;
+            fin.open("/Users/mahamimran/Files/InternationalFlightSchedule.txt",ios::in);
+            while(fin){
+                if(fin.is_open()){
+                    getline(fin, flightID, '%');
+                    getline(fin, plane, '%');
+                    getline(fin, departureCity, '%');
+                    getline(fin, nsthstring, '%');
+                    getline(fin, arrivalCountry, '%');
+                    getline(fin, departureDate, '%');
+                    getline(fin, departureTime, '%');
+                    getline(fin, arrivalDate, '%');
+                    getline(fin, arrivalTime, '%');
+                    nsth = nsthstring[0];
+                    cout<<"Flight ID: "<<flightID<<endl;
+                    cout<<"Plane: "<<plane<<endl;
+                    cout<<"Departure City: "<<departureCity<<endl;
+                    cout<<"North/South: "<<nsth<<endl;
+                    cout<<"Arrival Country: "<<arrivalCountry<<endl;
+                    cout<<"Departure Date: "<<departureDate<<endl;
+                    cout<<"Departure Time: "<<departureTime<<endl;
+                    cout<<"Arrival Date: "<<arrivalDate<<endl;
+                    cout<<"Arrival Time: "<<arrivalTime<<endl;
+                    cout<<endl;
+                }
+                else cout<<"file not open"<<endl;
+            }
+            fin.close();
+            break;
+        }
+        case 3:
+            // exit
+            cout<<"exiting..."<<endl;
+            break;
+        default:
+            cout<<"Invalid choice entered. Please try again.\n";
+    }
+}while(choice!=3);
 }
 void mainMenu(){
     int choice=0;
@@ -1917,10 +2010,37 @@ void mainMenu(){
                         // login
                         passengerLogin();
                         break;
-                    case 2:
-                        // register
+                    case 2:{
+                        // register OR guest login
+                        int choice;
+                        do{
+                            cout<<"Would you like to register or sign in as guest?\n";
+                            cout<<"1. Register\n";
+                            cout<<"2. Guest\n";
+                            cout<<"3. Exit\n";
+                            cin>>choice;
+                            switch(choice){
+                                case 1:
+                                    // register
+                                    passengerRegistration();
+                                    break;
+                                case 2:
+                                    // guest
+                                    guestLogin();
+                                    break;
+                                case 3:
+                                    // exit
+                                    cout<<"exiting...\n";
+                                    break;
+                                default:
+                                    cout<<"Invalid choice\n";
+                                    break;
+                            }
+                        }while(choice!=3);
+
                         passengerRegistration();
                         break;
+                    }
                     case 3:
                         // exit
                         cout<<"exiting...\n";
@@ -1945,6 +2065,7 @@ void mainMenu(){
     }
 }
 int main(){
-    mainMenu();
+    guestLogin();
+    //mainMenu();
     return 0;
 }
