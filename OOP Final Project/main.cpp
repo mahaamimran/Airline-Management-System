@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "header.h"
 using namespace std;
 class Airplane;
 class City;
@@ -29,29 +30,6 @@ void mainMenu();
 const int economySeats = 50;
 const int businessSeats = 10;
 int passengers=0;
-// Airplane class
-class Airplane{ 
-private:
-    string airplaneID;
-    int capacityEconomy;
-    int capacityBusiness;
-    int numofPassengers; //  total 60, 30 can sit (capacity/2)
-public:
-    // constructors
-    Airplane();
-    Airplane(string id,int capE,int capB,int num);
-    Airplane(const Airplane &other);
-
-    // getters and setters
-    string getAirplaneID() const;
-    void setAirplaneID(string id);
-    int getCapacityEconomy() const;
-    void setCapacityEconomy(int capE);
-    int getCapacityBusiness() const;
-    void setCapacityBusiness(int capB);
-    int getNumofPassengers() const;
-    void setNumofPassengers(int num);
-};
 Airplane::Airplane(){
     airplaneID = "";
     capacityEconomy = 0;
@@ -94,25 +72,6 @@ int Airplane::getNumofPassengers() const{
 void Airplane::setNumofPassengers(int num){
     numofPassengers = num;
 }
-// City class
-class City{
-private:
-    string cityName;
-    char NorthSouth; // 'N' or 'S'
-    
-public:
-    // constructors
-    City();
-    City(string name,char NS);
-    City(const City &other);
-
-    // getters and setters
-    string getCityName() const;
-    void setCityName(string name);
-    char getNorthSouth() const;
-    void setNorthSouth(char NS);
-   
-};
 City::City(){
     cityName = "";
     NorthSouth = 'M'; // empty ahah
@@ -139,22 +98,6 @@ void City::setNorthSouth(char NS){
 }
 
 
-// Country class
-class Country{
-    string name;
-    int distance;
-public:
-    // constructors
-    Country();
-    Country(string name,int dist);
-    Country(const Country &other);
-
-    // getters and setters
-    string getName() const;
-    void setName(string name);
-    int getDistance() const;
-    void setDistance(int dist);
-};
 Country::Country(){
     name = "";
     distance = 0;
@@ -180,46 +123,6 @@ void Country::setDistance(int dist){
     distance = dist;
 }
 
-// Flight class 
-class Booking{
-    Airplane *airplane; // 1
-    Passenger *passenger; // 1 or more 
-    Country *country; // 1 to country
-    City *city; // 1 from city
-    City *cityTo;
-    FlightSchedule *flightSchedule; // route details
-    bool isLocal;
-    // if flight is local only populate two city stuff idk omg
-    // display cost by overloading << operator
-public:
-    // constructors 
-    Booking();
-    Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal);
-
-    // Getters
-    Airplane* getAirplane() const;
-    Passenger* getPassenger() const;
-    Country* getCountry() const;
-    City* getCity() const;
-    City *getCityTo() const;
-    FlightSchedule* getFlightSchedule() const;
-    bool getIsLocal() const;
-
-    // Setters
-    void setAirplane(Airplane* airplane);
-    void setPassenger(Passenger* passenger);
-    void setCountry(Country* country);
-    void setCity(City* city);
-    void setCityTo(City *cityTo);
-    void setFlightSchedule(FlightSchedule* flightSchedule);
-    void setIsLocal(bool isLocal);
-    // methods
-        // search for seat on airplane
-        // update flight schedule (25%)
-
-    // overloading operator << to display everything
-    friend ostream& operator<<(ostream& os, const Booking& booking);
-};
 Booking::Booking():airplane(nullptr),passenger(nullptr),country(nullptr),city(nullptr),cityTo(nullptr),flightSchedule(nullptr),isLocal(false){}
 Booking::Booking(Airplane* airplane, Passenger* passenger, Country* country, City* city, City *cityTo, FlightSchedule* flightSchedule, bool isLocal){
     this->airplane = airplane;
@@ -275,37 +178,6 @@ void Booking::setIsLocal(bool isLocal){
 
 
     // an array of passengers on an airplane
-// FlightSchedule class 
-class FlightSchedule{
-    string departureTime;
-    string arrivalTime;
-    string departureDate;
-    string arrivalDate;
-    double ticketPrice; // calculated in a memeber function called calculateTicketPrice()
-    // change/cancel 25% deduction 
-public:
-    // constructors
-    FlightSchedule();
-    FlightSchedule(string depTime,string arrTime,string depDate,string arrDate,double price);
-    FlightSchedule(const FlightSchedule &other);
-
-    // getters + setters
-    void setDepartureTime(string depTime);
-    string getDepartureTime() const;
-    void setArrivalTime(string arrTime);
-    string getArrivalTime() const;
-    void setDepartureDate(string depDate);
-    string getDepartureDate() const;
-    void setArrivalDate(string arrDate);
-    string getArrivalDate() const;
-    void setTicketPrice(double price);
-    double getTicketPrice() const;
-
-    // methods
-    void calculateTicketPrice();
-    void changeFlightSchedule();
-    // change/cancel 25% deduction
-};
 FlightSchedule::FlightSchedule(){
     departureTime = "";
     arrivalTime = "";
@@ -364,24 +236,6 @@ void FlightSchedule::changeFlightSchedule(){
     ticketPrice = 0.75 * ticketPrice;
 }
 
-// Login class
-class Login{
-    protected:
-        string username;
-        string password;
-
-    public:
-        // Constructors
-        Login();
-        Login(string un,string pw);
-        Login(const Login &other);
-
-        // Getters and setters
-        string getUsername() const;
-        void setUsername(string un);
-        string getPassword() const;
-        void setPassword(string pw);
-};
 Login::Login(){
     username = "";
     password = "";
@@ -401,27 +255,13 @@ void Login::setUsername(string un){
     username = un;
 }
 string Login::getPassword() const {
-    return string(password.length(), '*');
+    return password;
 }
 void Login::setPassword(string pw){
     password = pw;
 }
 
 // AdminAccount class
-class AdminAccount : public Login{
-public:
-   // Constructors
-    AdminAccount();
-    AdminAccount(string un,string pw);
-    AdminAccount(const AdminAccount &other);
-
-    // member functions
-    void displayLoginDetails(); // '***' instead of pwd
-    void changeFlightSchedule();
-    void addNewRoute();
-    void restrictNumberOfPassengers();
-    // updates in these functions
-};
 AdminAccount::AdminAccount():Login("",""){}
 AdminAccount::AdminAccount(string un,string pw):Login(un,pw){}
 AdminAccount::AdminAccount(const AdminAccount &other):Login(other){}
@@ -1413,31 +1253,73 @@ void AdminAccount::addNewRoute(){
 }
 void AdminAccount::restrictNumberOfPassengers(){
     // restrict number of passengers
+    int planeChoice;
+    string plane;
+    do{
+        cout<<"What Airplane will be used for this flight?\n";
+        cout<<"1. PK101\n";
+        cout<<"2. PK102\n";
+        cout<<"3. PK103\n";
+        cout<<"4. PK104\n";
+        cout<<"5. PK105\n";
+        cout<<"6. PK106\n";
+        cout<<"7. PK107\n";
+        cout<<"8. PK108\n";
+        cout<<"9. PK109\n";
+        cout<<"10. PK110\n";
+        cin>>planeChoice;
+        switch(planeChoice){
+            case 1:
+                plane = "PK101";
+                break;
+            case 2:
+                plane = "PK102";
+                break;
+            case 3:
+                plane = "PK103";
+                break;
+            case 4:
+                plane = "PK104";
+                break;
+            case 5:
+                plane = "PK105";
+                break;
+            case 6:
+                plane = "PK106";
+                break;
+            case 7:
+                plane = "PK107";
+                break;
+            case 8:
+                plane = "PK108";
+                break;
+            case 9:
+                plane = "PK109";
+                break;
+            case 10:
+                plane = "PK110";
+                break;
+            default:
+                cout<<"Invalid choice. Please try again.\n";
+                break;
+        }
+    }while(planeChoice<1 || planeChoice>10);
+    cout<<"Maximum amount of Economy seats: ";
+    int eco;
+    cin>>eco;
+    cout<<"Maximum amount of Business seats: ";
+    int bus;
+    cin>>bus;
+    Airplane airplane(plane,eco,bus,++passengers);
 }
 
 
-// PassengerAccount class definition
-class PassengerAccount : public Login{
-public:
-    // constructors
-    PassengerAccount();
-    PassengerAccount(string un,string pwd);
-    PassengerAccount(const PassengerAccount &other);
-
-    // member functions
-    void displayAccountDetails(); // '***' instead of pwd
-    void resetPassword(Passenger passenger,string name);
-    void resetUsername(Passenger passenger, string name);
-    // overloading operators
-    bool operator==(const PassengerAccount &other);
-    friend ostream& operator<<(ostream &out,const PassengerAccount &pa);
-};
 PassengerAccount::PassengerAccount():Login("",""){}
 PassengerAccount::PassengerAccount(string un,string pwd):Login(un,pwd){}
 PassengerAccount::PassengerAccount(const PassengerAccount &other):Login(other){}
 void PassengerAccount::displayAccountDetails(){
     cout<<"username: "<<username<<endl;
-    cout<<"password: "<<getPassword()<<endl;
+    cout<<"password: "<<string(password.length(), '*')<<endl;
     // display username and password
 }
 bool PassengerAccount::operator==(const PassengerAccount &other){
@@ -1452,25 +1334,6 @@ ostream& operator<<(ostream &out,const PassengerAccount &pa){
     return out;
 }
 
-// PaymentDetails class definition
-class PaymentDetails{
-private:
-    string cardNumber;
-    string expiryDate;
-    string cvv;
-public:
-    // constructors
-    PaymentDetails();
-    PaymentDetails(string cn,string ed,string cv);
-    PaymentDetails(const PaymentDetails &other);
-    // getters and setters
-    string getCardNumber() const;
-    void setCardNumber(string cn);
-    string getExpiryDate() const;
-    void setExpiryDate(string ed);
-    string getCvv() const;
-    void setCvv(string cv);
-};
 PaymentDetails::PaymentDetails(){
     cardNumber = "";
     expiryDate = "";
@@ -1505,56 +1368,15 @@ void PaymentDetails::setCvv(string cv){
     cvv = cv;
 }
 
-class Passenger{
-private:
-    string name;
-    string passportNumber;
-    int cnic;
-    bool visaStatus;
-    PassengerAccount* login;
-    PaymentDetails* paymentDetails;
-
-public:
-    // Constructors
-    Passenger();
-    Passenger(string nm,string pn,int cn,bool vs,PassengerAccount* lg,PaymentDetails* pd);
-    Passenger(const Passenger &other);
-
-    // getters + setters
-    string getName() const;
-    void setName(string nm);
-
-    string getPassportNumber() const;
-    void setPassportNumber(string pn);
-
-    int getCnic() const;
-    void setCnic(int cn);
-
-    bool getVisaStatus() const;
-    void setVisaStatus(bool vs);
-
-    PassengerAccount* getLogin() const;
-    void setLogin(PassengerAccount* lg);
-
-    PaymentDetails* getPaymentDetails() const;
-    void setPaymentDetails(PaymentDetails* pd);
-
-    // Member Functions
-    void viewMostVisitedCountry();
-    void viewTravellingCost();
-
-    // overloading<<operator
-    friend ostream& operator<<(ostream& os,const Passenger& p);
-};
 Passenger::Passenger(){
     name = "";
     passportNumber = "";
-    cnic = 0;
+    cnic = "";
     visaStatus = false;
     login = nullptr;
     paymentDetails = nullptr;
 }
-Passenger::Passenger(string nm,string pn,int cn,bool vs,PassengerAccount* lg,PaymentDetails* pd){
+Passenger::Passenger(string nm,string pn,string cn,bool vs,PassengerAccount* lg,PaymentDetails* pd){
     name = nm;
     passportNumber = pn;
     cnic = cn;
@@ -1582,10 +1404,10 @@ string Passenger::getPassportNumber() const{
 void Passenger::setPassportNumber(string pn){
     passportNumber = pn;
 }
-int Passenger::getCnic() const{
+string Passenger::getCnic() const{
     return cnic;
 }
-void Passenger::setCnic(int cn){
+void Passenger::setCnic(string cn){
     cnic = cn;
 }
 bool Passenger::getVisaStatus() const{
@@ -1656,7 +1478,12 @@ ostream& operator<<(ostream& os,const Passenger& p){
     os<<"CNIC: "<<p.cnic<<endl;
     os<<"Visa Status: "<<p.visaStatus<<endl;
     os<<"Login Username: "<<p.login->getUsername()<<endl;
-    os<<"Login Password: "<<p.login->getPassword()<<endl;
+    os << "Login Password: ";
+    for (int i = 0; i < p.login->getPassword().length(); i++) {
+        os << "*";
+    }
+    os << endl;
+
     return os;
 }
 
@@ -1671,7 +1498,12 @@ ostream& operator<<(ostream& os, const Booking& booking) {
     os << "CNIC: " << booking.getPassenger()->getCnic() << endl;
     os << "Visa Status: " << (booking.getPassenger()->getVisaStatus() ? "Valid" : "Invalid") << endl;
     os << "Username: "<<booking.getPassenger()->getLogin()->getUsername()<<endl;
-    os << "Password: "<<booking.getPassenger()->getLogin()->getPassword()<<endl;
+    os << "Password: ";
+    for (int i = 0; i < booking.getPassenger()->getLogin()->getPassword().length();i++) {
+        os << "*";
+    }
+    os << endl;
+
     os << "Card Number: "<<booking.getPassenger()->getPaymentDetails()->getCardNumber()<<endl;
     os << "Expiry Date: " << booking.getPassenger()->getPaymentDetails()->getExpiryDate() << endl;
     os << "CVV: " << booking.getPassenger()->getPaymentDetails()->getCvv() << endl;
@@ -1746,10 +1578,30 @@ void passengerRegistration(){
     cout<<"Enter your passport number: ";
     string passportNumber;
     cin >> passportNumber;
-    int cnic;
-    cout<<"Enter your CNIC (13 digits): ";
-    cin>>cnic;
-    // ADD VALIDATION
+    string cnic;
+    bool foundcnic = false;
+    do{
+        cout<<"Enter your CNIC (13 digits): ";
+        cin>>cnic;
+          // checks if cnic is already in file
+        fstream fin;
+        fin.open("/Users/mahamimran/Files/PassengerDetails.txt",ios::in);
+        if(!fin){
+            cout<<"Error opening file\n";
+            return;
+        }
+        string line;
+        while(getline(fin, line)){
+            if(line.find(cnic) != string::npos){
+                cout << "CNIC already in record. Please try again.\n";
+                foundcnic = true;
+                break;
+            }
+        }
+        fin.close();
+    }while(cnic.length()!=13 && foundcnic);
+  
+    
     // 13 digits, not previously in record :/
     cout<<"Do you have a visa? (1 for yes,0 for no): ";
     bool visaStatus;
@@ -1782,26 +1634,36 @@ void passengerRegistration(){
     // create passenger account
     cout<<"creating account...\n";
     cout<<"Your username is: "<<name<<"_"<<endl;
-    cout<<"Enter your password: ";
+    // excpetion handling
     string password;
-    cin >> password;
-    cout<<"Confirm your password: ";
-    string confirmPassword;
-    cin >> confirmPassword;
-    while(password != confirmPassword
-          || password.length() < 8
-          || password.length() > 16
-          || password.find_first_of("0123456789") == string::npos
-          || password.find_first_of("!@#$%^&*()_+") == string::npos
-          || password.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == string::npos
-          || password.find_first_of("abcdefghijklmnopqrstuvwxyz") == string::npos){
-        cout<<"Passwords do not match or do not meet the requirements. Please try again."<<endl;
-        cout<<"Password must be 8-16 characters long and include at least one uppercase letter,one lowercase letter,one digit,and one special character."<<endl;
-        cout<<"Enter your password: ";
-        cin >> password;
-        cout<<"Confirm your password: ";
-        cin >> confirmPassword;
+    bool isValidPassword = false;
+
+    while (!isValidPassword) {
+        try {
+            cout << "Enter your password: ";
+            cin >> password;
+
+            cout << "Confirm your password: ";
+            string confirmPassword;
+            cin >> confirmPassword;
+
+            if (password == confirmPassword
+                && password.length() >= 8
+                && password.length() <= 16
+                && password.find_first_of("0123456789") != string::npos
+                && password.find_first_of("!@#$%^&*()_+") != string::npos
+                && password.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ") != string::npos
+                && password.find_first_of("abcdefghijklmnopqrstuvwxyz") != string::npos) {
+                isValidPassword = true;
+            } else {
+                throw runtime_error("Passwords do not match or do not meet the requirements.");
+            }
+        } catch (const exception& e) {
+            cout << "Exception: " << e.what() << endl;
+        }
     }
+
+    cout << "Valid password entered!" << endl;
     PassengerAccount passengerAccount(name+"_",password);
     Passenger passenger(name,passportNumber,cnic,visaStatus,&passengerAccount,&paymentDetails);
     cout<<"Your account has been created successfully!\n";
@@ -2090,7 +1952,7 @@ void passengerLogin(){
     bool visaStatus = (visaStatus2 == "1");
     PaymentDetails paymentDetails(cardNumber, expiryDate, cvv);
     PassengerAccount passengerAccount(username2, password2);
-    Passenger passenger(name2, passportNumber, stoi(cnic), visaStatus, &passengerAccount, &paymentDetails);
+    Passenger passenger(name2, passportNumber, cnic, visaStatus, &passengerAccount, &paymentDetails);
     cout << "Your details are as follows:\n";
     cout << passenger;
 
@@ -2320,7 +2182,6 @@ void mainMenu(){
         }
     }
 }
-
 int main(){
     mainMenu();
     return 0;
