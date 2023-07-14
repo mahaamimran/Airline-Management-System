@@ -21,7 +21,7 @@ NAFS is an airline management system developed for a newly established (fake) ai
 ### Clone the repository: 
 - Run the command: 
 ```shell
-git clone https://github.com/mahaamimran/OOP-Project.git
+git clone https://github.com/mahaamimran/Airline-Management-System.git
 ```
 - Find and replace ```/Users/mahamimran/Files``` with your preferred file destination for file handling.
 ##### - Maham
